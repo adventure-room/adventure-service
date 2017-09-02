@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serverConfig xmlns="http://programyourhome.com/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://programyourhome.com/config ../xsd/program-your-home-config-server.xsd">
+    <defaultLanguage>English-USA</defaultLanguage>
+    <people>
+   		<person>
+   			<id>1</id>
+   			<userid>1</userid>
+   			<type>resident</type>
+   			<firstName>Erik</firstName>
+   			<lastName>Mulder</lastName>
+   			<birthDate>1982-11-18</birthDate>
+   		</person>
+		<person>
+   			<id>2</id>
+   			<type>guest</type>
+   			<firstName>Guest</firstName>
+   			<lastName>Account</lastName>
+		</person>
+    </people>
+    <stateConfig>
+    	<resident>
+			<defaultState>2</defaultState>
+			<states>
+				<state>
+					<id>1</id>
+					<name>active</name>
+					<description>Being at home and awake.</description>
+				</state>
+				<state>
+					<id>2</id>
+					<name>asleep</name>
+					<description>Being at home and asleep.</description>
+				</state>
+				<state>
+					<id>3</id>
+					<name>away</name>
+					<description>Not being at home during the day, but back before the night.</description>
+				</state>
+				<state>
+					<id>4</id>
+					<name>vacation</name>
+					<description>Not being at home during the day and the night.</description>
+				</state>
+			</states>
+			<stateTransitions>
+				<stateTransition>
+					<from>1</from>
+					<to>2</to>
+					<name>Go to sleep</name>
+					<description>Going to bed at home at the end of the day.</description>
+				</stateTransition>
+				<stateTransition>
+					<from>1</from>
+					<to>3</to>
+					<name>Leave the house</name>
+					<description>Leaving the home, but return before the end of the day.</description>
+				</stateTransition>
+				<stateTransition>
+					<from>1</from>
+					<to>4</to>
+					<name>Leave for vacation</name>
+					<description>Leaving the home and not returning for the night.</description>
+				</stateTransition>
+				<stateTransition>
+					<from>2</from>
+					<to>1</to>
+					<name>Wake up</name>
+					<description>Waking up at home after a night of sleep.</description>
+				</stateTransition>
+				<stateTransition>
+					<from>3</from>
+					<to>1</to>
+					<name>Come back</name>
+					<description>Coming back at home after being away during the day.</description>
+				</stateTransition>
+				<stateTransition>
+					<from>3</from>
+					<to>4</to>
+					<name>Stay the night away</name>
+					<description>Not returning home for the night after all.</description>
+				</stateTransition>
+				<stateTransition>
+					<from>4</from>
+					<to>1</to>
+					<name>Come home</name>
+					<description>Coming back at home after begin away for one or more nights.</description>
+				</stateTransition>
+			</stateTransitions>
+    	</resident>
+    	<guest>
+			<defaultState>1</defaultState>
+			<states>
+				<state>
+					<id>11</id>
+					<name>away</name>
+					<description>Not visiting.</description>
+				</state>
+				<state>
+					<id>12</id>
+					<name>visiting</name>
+					<description>Visiting the home during the day.</description>
+				</state>
+				<state>
+					<id>13</id>
+					<name>asleep</name>
+					<description>Visiting the home during the night.</description>
+				</state>
+			</states>
+			<stateTransitions>
+				<stateTransition>
+					<from>11</from>
+					<to>12</to>
+					<name>Visit</name>
+					<description>Arriving at the home to pay a visit.</description>
+				</stateTransition>
+				<stateTransition>
+					<from>12</from>
+					<to>11</to>
+					<name>Leave</name>
+					<description>Leaving the home after a visit.</description>
+				</stateTransition>
+				<stateTransition>
+					<from>12</from>
+					<to>13</to>
+					<name>Go to sleep</name>
+					<description>Going to bed at the home to stay for the night.</description>
+				</stateTransition>
+				<stateTransition>
+					<from>13</from>
+					<to>12</to>
+					<name>Wake up</name>
+					<description>Waking up at the home after a night of sleep.</description>
+				</stateTransition>
+			</stateTransitions>
+    	</guest>
+    	<home>
+    		<homeStates>
+    			<homeState>
+	    			<state>
+	    				<id>1</id>
+	    				<name>active</name>
+	    				<description>Someone in the home is active.</description>
+	    			</state>
+	    			<trigger>
+	    				<derived>
+	    					<and>
+	    						<or>
+	    							<logicGrouping>some</logicGrouping>
+	    							<people>residents</people>
+	    							<state>1</state>
+	    						</or>
+	    						<or>
+	    							<logicGrouping>some</logicGrouping>
+	    							<people>guests</people>
+	    							<state>2</state>
+	    						</or>
+	    					</and>
+	    				</derived>
+	    			</trigger>
+    			</homeState>
+    			<homeState>
+	    			<state>
+	    				<id>2</id>
+	    				<name>sleeping</name>
+	    				<description>Everybody in the home is sleeping.</description>
+	    			</state>
+	    			<trigger>
+	    				<derived>
+	    					<and>
+	    						<or>
+	    							<logicGrouping>none</logicGrouping>
+	    							<people>residents</people>
+	    							<state>1</state>
+	    						</or>
+    						</and>
+    						<and>
+	    						<or>
+	    							<logicGrouping>none</logicGrouping>
+	    							<people>guests</people>
+	    							<state>2</state>
+	    						</or>
+	    					</and>
+	    					<and>
+	    						<or>
+	    							<logicGrouping>some</logicGrouping>
+	    							<people>residents</people>
+	    							<state>2</state>
+	    						</or>
+	    						<or>
+	    							<logicGrouping>some</logicGrouping>
+	    							<people>guests</people>
+	    							<state>3</state>
+	    						</or>
+	    					</and>
+	    				</derived>
+	    			</trigger>
+    			</homeState>
+    			<homeState>
+	    			<state>
+	    				<id>3</id>
+	    				<name>away</name>
+	    				<description>Nobody is in the home, but someone is expected to return before the night.</description>
+	    			</state>
+	    			<trigger>
+	    				<derived>
+	    					<and>
+	    						<or>
+	    							<logicGrouping>none</logicGrouping>
+	    							<people>residents</people>
+	    							<state>1</state>
+	    						</or>
+    						</and>
+    						<and>
+	    						<or>
+	    							<logicGrouping>none</logicGrouping>
+	    							<people>guests</people>
+	    							<state>2</state>
+	    						</or>
+	    					</and>
+	    					<and>
+	    						<or>
+	    							<logicGrouping>none</logicGrouping>
+	    							<people>residents</people>
+	    							<state>2</state>
+	    						</or>
+    						</and>
+    						<and>
+	    						<or>
+	    							<logicGrouping>none</logicGrouping>
+	    							<people>guests</people>
+	    							<state>3</state>
+	    						</or>
+	    					</and>
+	    					<and>
+	    						<or>
+	    							<logicGrouping>some</logicGrouping>
+	    							<people>residents</people>
+	    							<state>3</state>
+	    						</or>
+	    					</and>
+	    				</derived>
+	    			</trigger>
+    			</homeState>
+    			<homeState>
+	    			<state>
+	    				<id>4</id>
+	    				<name>holiday</name>
+	    				<description>Nobody is in the home, and nobody is expected to return before the night.</description>
+	    			</state>
+	    			<trigger>
+	    				<derived>
+	    					<and>
+	    						<or>
+	    							<logicGrouping>all</logicGrouping>
+	    							<people>residents</people>
+	    							<state>4</state>
+	    						</or>
+    						</and>
+    						<and>
+	    						<or>
+	    							<logicGrouping>none</logicGrouping>
+	    							<people>guests</people>
+	    							<state>2</state>
+	    						</or>
+	    					</and>
+    						<and>
+	    						<or>
+	    							<logicGrouping>none</logicGrouping>
+	    							<people>guests</people>
+	    							<state>3</state>
+	    						</or>
+	    					</and>
+	    				</derived>
+	    			</trigger>
+    			</homeState>
+    		</homeStates>
+    	</home>
+    </stateConfig>
+    <activitiesConfig>
+        <defaultIcon>default.png</defaultIcon>
+        <activities>
+            <activity>
+                <id>1</id>
+                <name>Laptop on TV</name>
+                <description>Show the laptop screen on the TV.</description>
+                <icon>laptop.png</icon>
+                <modules>
+                    <infraRed>
+                        <devices>
+                            <device>
+                                <id>1</id>
+                                <turnOn>true</turnOn>
+                                <input>HDMI 2</input>
+                            </device>
+                            <device>
+                                <id>3</id>
+                                <turnOn>true</turnOn>
+                            </device>
+                        </devices>
+                        <volumeControl>1</volumeControl>
+                    </infraRed>
+                    <pcInstructor>
+                        <mouseControl>true</mouseControl>
+                        <keyboardControl>true</keyboardControl>
+                    </pcInstructor>
+                </modules>
+            </activity>
+            <activity>
+                <id>2</id>
+                <name>Watch TV</name>
+                <description>Watch Live TV or recorded programs.</description>
+                <icon>television.png</icon>
+                <modules>
+                    <infraRed>
+                        <devices>
+                            <device>
+                                <id>1</id>
+                                <turnOn>true</turnOn>
+                                <input>HDMI 1</input>
+                            </device>
+                            <device>
+                                <id>3</id>
+                                <turnOn>true</turnOn>
+                            </device>
+                            <device>
+                                <id>4</id>
+                                <turnOn>true</turnOn>
+                            </device>
+                        </devices>
+                        <volumeControl>1</volumeControl>
+                        <channelControl>4</channelControl>
+                        <playControl>4</playControl>
+                        <recordControl>4</recordControl>
+                        <menuControl>4</menuControl>
+                    </infraRed>
+                </modules>
+            </activity>
+            <activity>
+                <id>3</id>
+                <name>Wii</name>
+                <description>Play on the Wii.</description>
+                <icon>wii.png</icon>
+                <modules>
+                    <infraRed>
+                        <devices>
+                            <device>
+                                <id>1</id>
+                                <turnOn>true</turnOn>
+                                <input>AV 6</input>
+                            </device>
+                            <device>
+                                <id>3</id>
+                                <turnOn>true</turnOn>
+                            </device>
+                        </devices>
+                        <volumeControl>1</volumeControl>
+                    </infraRed>
+                </modules>
+            </activity>
+        </activities>
+    </activitiesConfig>
+    <dailyRhythm>
+	    <lightsDailyRhythymConfig>
+	        <turnLightsOnBelowSunDegree>5</turnLightsOnBelowSunDegree>
+	        <lights>
+	            <id>1</id>
+	            <id>2</id>
+	            <id>3</id>
+	        </lights>
+	        <keyFrames>
+	            <keyFrame>
+	                <time>02:00</time>
+	                <endState>
+	                    <dim>0</dim>
+	                    <colorTemperature>10000</colorTemperature>
+	                </endState>
+	            </keyFrame>
+	            <keyFrame>
+	                <time>05:00</time>
+	                <endState>
+	                    <dim>10000</dim>
+	                    <colorTemperature>10000</colorTemperature>
+	                </endState>
+	            </keyFrame>
+	            <keyFrame>
+	                <time>06:30</time>
+	                <endState>
+	                    <dim>10000</dim>
+	                    <colorTemperature>0</colorTemperature>
+	                </endState>
+	            </keyFrame>
+	            <keyFrame>
+	                <time>18:00</time>
+	                <endState>
+	                    <dim>10000</dim>
+	                    <colorTemperature>0</colorTemperature>
+	                </endState>
+	            </keyFrame>
+	            <keyFrame>
+	                <time>23:00</time>
+	                <endState>
+	                    <dim>10000</dim>
+	                    <colorTemperature>10000</colorTemperature>
+	                </endState>
+	            </keyFrame>
+	        </keyFrames>
+        </lightsDailyRhythymConfig>
+        <activations>
+        	<activation>
+        		<homeState>1</homeState>
+        		<dailyRhytymTrigger>sensor</dailyRhytymTrigger>
+       		</activation>
+        	<activation>
+        		<homeState>2</homeState>
+        		<dailyRhytymTrigger>alwaysOff</dailyRhytymTrigger>
+       		</activation>
+        	<activation>
+        		<homeState>3</homeState>
+        		<dailyRhytymTrigger>alwaysOff</dailyRhytymTrigger>
+       		</activation>
+        	<activation>
+        		<homeState>4</homeState>
+        		<dailyRhytymTrigger>alwaysOff</dailyRhytymTrigger>
+       		</activation>
+        </activations>
+    </dailyRhythm>
+    <customBehaviors>
+    </customBehaviors>
+</serverConfig>
