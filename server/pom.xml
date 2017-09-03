@@ -82,6 +82,18 @@
             <version>${project.version}</version>
         </dependency>
         
+        <dependency>
+        	<groupId>default</groupId>
+        	<artifactId>iot-adventure-dsl_2.12</artifactId>
+        	<version>0.1</version>
+        </dependency>
+
+		<dependency>        
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.6.7.1</version>
+		</dependency>
+        
         <dependency>  
     	    <groupId>javax</groupId>    
     		<artifactId>javaee-web-api</artifactId>    

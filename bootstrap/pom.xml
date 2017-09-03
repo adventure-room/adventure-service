@@ -64,6 +64,11 @@
                     <artifactId>philips-hue</artifactId>
                     <version>${project.version}</version>
                 </dependency>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>amazon-polly</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
             </dependencies>
         </profile>
 

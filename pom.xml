@@ -11,6 +11,8 @@
         <module>server</module>
         <module>philips-hue-api</module>
         <module>philips-hue</module>
+        <module>amazon-polly-api</module>
+        <module>amazon-polly</module>
         <module>environment-mock</module>
         <module>bootstrap</module>
     </modules>
