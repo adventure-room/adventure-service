@@ -21,62 +21,61 @@ import javazoom.jl.player.advanced.PlaybackListener;
 @Component
 public class AmazonPollyImpl implements AmazonPolly {
 
-	// TODO: prevent naming clash?
-	private com.amazonaws.services.polly.AmazonPolly pollyClient;
-	
-	@PostConstruct
-	public void init() {
-		// create an Amazon Polly client in a specific region
-		pollyClient = AmazonPollyClient.builder()
-				.withCredentials(new DefaultAWSCredentialsProviderChain())
-				.withClientConfiguration(new ClientConfiguration())
-				.withRegion(Regions.EU_WEST_1)
-				.build();
-	}
-	
-	@Override
-	public void sayText(String voiceId, String text) {
-		synthesize(voiceId, TextType.Text, text);
-	}
-	
-	@Override
-	public void saySsml(String voiceId, String ssml) {
-		synthesize(voiceId, TextType.Ssml, ssml);		
-	}
-	
-	public void synthesize(String voiceId, TextType textType, String input) {
-		SynthesizeSpeechRequest synthReq = 
-		new SynthesizeSpeechRequest()
-				.withText(input)
-				.withTextType(textType)
-				.withVoiceId(voiceId)
-				.withOutputFormat(OutputFormat.Mp3);
-		SynthesizeSpeechResult synthRes = pollyClient.synthesizeSpeech(synthReq);
+    // TODO: prevent naming clash?
+    private com.amazonaws.services.polly.AmazonPolly pollyClient;
 
-		//TODO: split synthesis and playback
-			
-		try {
-			AdvancedPlayer player = new AdvancedPlayer(synthRes.getAudioStream(),
-					javazoom.jl.player.FactoryRegistry.systemRegistry().createAudioDevice());
-	
-			player.setPlayBackListener(new PlaybackListener() {
-				@Override
-				public void playbackStarted(PlaybackEvent evt) {
-					System.out.println("Playback started");
-					System.out.println(input);
-				}
-				
-				@Override
-				public void playbackFinished(PlaybackEvent evt) {
-					System.out.println("Playback finished");
-				}
-			});
-			
-			// play it!
-			player.play();
-		} catch (JavaLayerException e) {
-			throw new IllegalStateException("Exception occured during playback", e);
-		}
-	}
+    @PostConstruct
+    public void init() {
+        // create an Amazon Polly client in a specific region
+        this.pollyClient = AmazonPollyClient.builder()
+                .withCredentials(new DefaultAWSCredentialsProviderChain())
+                .withClientConfiguration(new ClientConfiguration())
+                .withRegion(Regions.EU_WEST_1)
+                .build();
+    }
+
+    @Override
+    public void sayText(String voiceId, String text) {
+        this.synthesize(voiceId, TextType.Text, text);
+    }
+
+    @Override
+    public void saySsml(String voiceId, String ssml) {
+        this.synthesize(voiceId, TextType.Ssml, ssml);
+    }
+
+    public void synthesize(String voiceId, TextType textType, String input) {
+        SynthesizeSpeechRequest synthReq = new SynthesizeSpeechRequest()
+                .withText(input)
+                .withTextType(textType)
+                .withVoiceId(voiceId)
+                .withOutputFormat(OutputFormat.Mp3);
+        SynthesizeSpeechResult synthRes = this.pollyClient.synthesizeSpeech(synthReq);
+
+        // TODO: split synthesis and playback
+
+        try {
+            AdvancedPlayer player = new AdvancedPlayer(synthRes.getAudioStream(),
+                    javazoom.jl.player.FactoryRegistry.systemRegistry().createAudioDevice());
+
+            player.setPlayBackListener(new PlaybackListener() {
+                @Override
+                public void playbackStarted(PlaybackEvent evt) {
+                    System.out.println("Playback started");
+                    System.out.println(input);
+                }
+
+                @Override
+                public void playbackFinished(PlaybackEvent evt) {
+                    System.out.println("Playback finished");
+                }
+            });
+
+            // play it!
+            player.play();
+        } catch (JavaLayerException e) {
+            throw new IllegalStateException("Exception occured during playback", e);
+        }
+    }
 
 }

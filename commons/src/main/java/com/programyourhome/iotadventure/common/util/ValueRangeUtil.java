@@ -16,7 +16,8 @@ public final class ValueRangeUtil {
         return minValue + fraction * (maxValue - minValue);
     }
 
-    public static int convertValueFromRangeToRange(final int value, final int minValueFrom, final int maxValueFrom, final int minValueTo, final int maxValueTo) {
+    public static int convertValueFromRangeToRange(final int value, final int minValueFrom, final int maxValueFrom,
+            final int minValueTo, final int maxValueTo) {
         final double fraction = ((double) (value - minValueFrom)) / (maxValueFrom - minValueFrom);
         return calculateIntFractionInRange(fraction, minValueTo, maxValueTo);
     }

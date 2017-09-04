@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,9 +64,9 @@ public class PhilipsHueMock extends PyhMock {
 
         // Keep track of light state for more realistic behavior when mocking.
         Mockito.doAnswer(invocation -> this.lightStates.put(invocation.getArgument(0), true))
-                .when(philipsHueMock).turnOnLight(Matchers.anyInt());
+                .when(philipsHueMock).turnOnLight(ArgumentMatchers.anyInt());
         Mockito.doAnswer(invocation -> this.lightStates.put(invocation.getArgument(0), false))
-                .when(philipsHueMock).turnOffLight(Matchers.anyInt());
+                .when(philipsHueMock).turnOffLight(ArgumentMatchers.anyInt());
 
         return philipsHueMock;
     }
