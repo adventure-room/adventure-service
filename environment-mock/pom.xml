@@ -40,7 +40,6 @@
             <artifactId>philips-hue-api</artifactId>
             <version>${apis.version}</version>
         </dependency>
-
     </dependencies>
 
 
