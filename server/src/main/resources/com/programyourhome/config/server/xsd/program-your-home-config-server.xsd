@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pyh="http://programyourhome.com/config" xmlns="http://programyourhome.com/config" targetNamespace="http://programyourhome.com/config"
     elementFormDefault="qualified">
-    <xsd:include schemaLocation="modules/program-your-home-config-philips-hue.xsd" />
     <xsd:element name="serverConfig">
         <xsd:complexType>
             <xsd:sequence>
