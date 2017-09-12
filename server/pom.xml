@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.programyourhome.iotadventure</groupId>
+        <groupId>com.programyourhome.adventureroom</groupId>
         <artifactId>parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -78,9 +78,9 @@
         </dependency>
 
         <dependency>
-            <groupId>default</groupId>
-            <artifactId>iot-adventure-dsl_2.12</artifactId>
-            <version>0.1</version>
+            <groupId>com.programyourhome.iotadventure</groupId>
+            <artifactId>dsl_2.12</artifactId>
+            <version>0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
