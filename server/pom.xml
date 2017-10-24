@@ -78,9 +78,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.programyourhome.iotadventure</groupId>
+            <groupId>com.programyourhome.adventureroom</groupId>
             <artifactId>dsl_2.12</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>

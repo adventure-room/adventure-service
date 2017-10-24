@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programyourhome.iotadventure.amazon.polly.AmazonPolly;
 import com.programyourhome.iotadventure.dsl.Dsl;
-import com.programyourhome.iotadventure.events.ButtonEvent;
-import com.programyourhome.iotadventure.events.Event;
-import com.programyourhome.iotadventure.events.SwitchEvent;
+import com.programyourhome.iotadventure.dsl.events.ButtonEvent;
+import com.programyourhome.iotadventure.dsl.events.Event;
+import com.programyourhome.iotadventure.dsl.events.SwitchEvent;
+import com.programyourhome.iotadventure.dsl.services.Services;
 import com.programyourhome.iotadventure.hue.PhilipsHue;
 import com.programyourhome.iotadventure.server.scripts.ScriptRunner;
-import com.programyourhome.iotadventure.services.Services;
 
 @RestController
 @RequestMapping("scripts")
@@ -36,9 +36,9 @@ public class ProgramYourHomeControllerScripts extends AbstractProgramYourHomeSer
 
     public ProgramYourHomeControllerScripts() {
         this.dsl = Dsl.instance();
-        this.dsl.subscribeListener(event -> System.out.println("Java Event listener: " + event), Event.class);
-        this.dsl.subscribeListener(event -> System.out.println("Java ButtonEvent: " + event), ButtonEvent.class);
-        this.dsl.subscribeListener(event -> System.out.println("Java SwitchEvent: " + event), SwitchEvent.class);
+        this.dsl.subscribeFromJava(event -> System.out.println("Java Event listener: " + event), Event.class);
+        this.dsl.subscribeFromJava(event -> System.out.println("Java ButtonEvent: " + event), ButtonEvent.class);
+        this.dsl.subscribeFromJava(event -> System.out.println("Java SwitchEvent: " + event), SwitchEvent.class);
     }
 
     @PostConstruct
