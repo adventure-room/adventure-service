@@ -1,4 +1,4 @@
-package com.programyourhome.adventureroom.server.loaders.converters;
+package com.programyourhome.adventureroom.server.loader.converters;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

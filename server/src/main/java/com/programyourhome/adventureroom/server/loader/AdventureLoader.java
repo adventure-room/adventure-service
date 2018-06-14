@@ -1,4 +1,4 @@
-package com.programyourhome.adventureroom.server.loaders;
+package com.programyourhome.adventureroom.server.loader;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -34,6 +34,7 @@ import com.programyourhome.adventureroom.server.ProgramYourHomeServer;
 import com.programyourhome.adventureroom.server.util.FileUtil;
 import com.programyourhome.adventureroom.server.util.PropertiesUtil;
 import com.programyourhome.iotadventure.runner.action.executor.ActionExecutor;
+import com.programyourhome.iotadventure.runner.context.ExecutionContext;
 
 import one.util.streamex.StreamEx;
 
@@ -85,7 +86,7 @@ public class AdventureLoader {
     private <A extends Action> void executeAction(A action, String actionExecutorClassName) {
         Class<? extends ActionExecutor<A>> actionExecutorClass = ReflectionUtil.classForNameNoCheckedException(actionExecutorClassName);
         ActionExecutor<A> actionExecutor = ReflectionUtil.callConstructorNoCheckedException(actionExecutorClass);
-        actionExecutor.execute(action);
+        actionExecutor.execute(action, this.executionContect);
     }
 
     // TODO: make configurable
@@ -105,7 +106,10 @@ public class AdventureLoader {
         return new File(this.getAdventurePath(id)).exists();
     }
 
+    private ExecutionContext executionContect;
+
     // TODO: completely refactor this once logic works well.
+    // TODO: Also support unloading of modules, since you should be able to switch between adventures
     public Adventure load(String id) throws IOException {
         FileUtil.assertDirectoryExists(this.getAdventurePath(id));
         File adventurePropertiesFile = new File(this.getAdventurePath(id) + ADVENTURE_PROPERTIES_FILENAME);
@@ -113,9 +117,16 @@ public class AdventureLoader {
 
         Adventure adventure = PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(adventurePropertiesFile), Adventure.class, this.conversionService);
 
+        // TODO: Loading modules should be done somewhere at startup and not here!
+        // TODO: hmm, then how to handle different properties for modules per adventure?
+        // Maybe we do need to reload the whole thing with each adventure, also more dynamic regarding classpath changes during runtime.
         ServiceLoader<AdventureModule> moduleLoader = ServiceLoader.load(AdventureModule.class);
         Map<String, AdventureModule> availableModules = new HashMap<>();
         moduleLoader.forEach(module -> availableModules.put(module.getConfig().getId(), module));
+
+        // TODO: load this separately
+        this.executionContect = new ExecutionContext();
+        this.executionContect.modules = availableModules;
 
         for (String requiredModuleId : adventure.requiredModules) {
             if (!availableModules.keySet().contains(requiredModuleId)) {
@@ -203,6 +214,16 @@ public class AdventureLoader {
         }
 
         // TODO: load triggers
+
+        // Must be done now instead of when discovering modules, cause otherwise the extra props are not available
+        moduleLoader.forEach(module -> {
+            // Start deamons
+            // TODO: only start required modules!
+            module.getConfig().deamons.forEach((name, runnable) -> {
+                System.out.println("Starting deamon [" + name + "] for module [" + module.getConfig().getName() + "]");
+                new Thread(runnable).start();
+            });
+        });
 
         return adventure;
     }
