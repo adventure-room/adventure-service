@@ -1,1 +1,0 @@
-java -cp "target/classes/;lib/huelocalsdk.jar;lib/sdkresources.jar" nl.ewjmulder.smarthome.hue.Main

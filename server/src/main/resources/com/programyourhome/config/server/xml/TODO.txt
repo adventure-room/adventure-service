@@ -1,2 +1,0 @@
-This folder contains example XML's
-But for now they are used a the primary source XML config's, to test the functionality.

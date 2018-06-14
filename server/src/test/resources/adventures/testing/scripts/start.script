@@ -1,0 +1,9 @@
+id = start
+name = Start Adventure
+description = Set the scene with a suspense introduction
+requiredModules = philipshue, amazonpolly, piwall, immmerse
+
+---
+
+dim the lights to 10
+
