@@ -5,6 +5,7 @@ requiredModules = philipshue, amazonpolly, piwall, immmerse
 
 ---
 
-pete says hello
 dim the lights to 10
+pete says "Welcome to the adventure"
+turn off the lights
 

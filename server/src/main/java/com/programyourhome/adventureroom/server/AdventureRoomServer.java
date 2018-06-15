@@ -6,15 +6,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.context.ApplicationContext;
 
-public class ProgramYourHomeServer {
+public class AdventureRoomServer {
 
     private static boolean shutdown = false;
 
     public static void startServer(final Class<?> springBootApplicationClass) {
-        final String usageMessage = "Please provide the correct path to the Program Your Home property location with: -Dpyh.properties.location=/path/to/file";
-        final String pyhPropertyLocation = System.getProperty("pyh.properties.location");
+        final String usageMessage = "Please provide the correct path to the Adventure Room property location with: -Dadventureroom.properties.location=/path/to/file";
+        final String pyhPropertyLocation = System.getProperty("adventureroom.properties.location");
         if (pyhPropertyLocation == null) {
-            System.out.println("No value provided for property 'pyh.properties.location'.");
+            System.out.println("No value provided for property 'adventureroom.properties.location'.");
             System.out.println(usageMessage);
             System.exit(-1);
         }
@@ -26,7 +26,7 @@ public class ProgramYourHomeServer {
         }
         System.out.println("Using properties in file: " + propertiesFile.getAbsolutePath());
 
-        // Set the Spring config location file to the Program Your Home properties file, so it will pick up all
+        // Set the Spring config location file to the Advenure Room properties file, so it will pick up all
         // Spring boot config from there as well. Note: this must be done like this instead of using a @PropertySource
         // annotation, because otherwise the logging properties will not be picked up. They must be available
         // very early in the boot process, see also: https://github.com/spring-projects/spring-boot/issues/2709
@@ -56,11 +56,10 @@ public class ProgramYourHomeServer {
 
         @Override
         public void run() {
-            while (!ProgramYourHomeServer.shutdown) {
+            while (!AdventureRoomServer.shutdown) {
                 try {
                     Thread.sleep(100);
-                } catch (final InterruptedException e) {
-                }
+                } catch (final InterruptedException e) {}
             }
             System.exit(SpringApplication.exit(this.springBootContext, () -> 0));
         }

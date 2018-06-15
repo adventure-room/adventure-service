@@ -4,12 +4,8 @@ public interface Describable {
 
     public String getId();
 
-    public default String getName() {
-        return this.getId();
-    }
+    public String getName();
 
-    public default String getDescription() {
-        return this.getName();
-    }
+    public String getDescription();
 
 }

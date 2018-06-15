@@ -2,17 +2,22 @@ package com.programyourhome.iotadventure.runner.context;
 
 import java.util.Map;
 
+import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.module.AdventureModule;
 
 public class ExecutionContext {
 
-    public Map<String, AdventureModule> modules;
+    private final Adventure adventure;
 
-    public Map<String, Object> variables;
+    private Map<String, Object> variables;
+
+    public ExecutionContext(Adventure adventure) {
+        this.adventure = adventure;
+    }
 
     @SuppressWarnings("unchecked")
     public <M extends AdventureModule> M getModule(String id) {
-        return (M) this.modules.get(id);
+        return (M) this.adventure.getModule(id);
     }
 
     @SuppressWarnings("unchecked")

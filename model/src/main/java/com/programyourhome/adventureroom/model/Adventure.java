@@ -1,5 +1,6 @@
 package com.programyourhome.adventureroom.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,14 @@ public class Adventure extends AbstractDescribable {
     public Map<Event, Script> triggers = new HashMap<>();
     public Map<String, Character> characters = new HashMap<>();
     public Map<Class<? extends Resource>, Map<String, Resource>> resources = new HashMap<>();
+
+    public Collection<AdventureModule> getModules() {
+        return this.modules.values();
+    }
+
+    public AdventureModule getModule(String id) {
+        return this.modules.get(id);
+    }
 
     @SuppressWarnings("unchecked")
     public <C extends Character> C getCharacter(String id) {
