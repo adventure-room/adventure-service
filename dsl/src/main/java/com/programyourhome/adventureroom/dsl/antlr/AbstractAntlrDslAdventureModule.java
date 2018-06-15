@@ -10,9 +10,11 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.TokenStream;
 
 import com.programyourhome.adventureroom.dsl.util.ReflectionUtil;
+import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.module.AdventureModule;
 import com.programyourhome.adventureroom.model.script.action.Action;
 
@@ -80,10 +82,10 @@ public abstract class AbstractAntlrDslAdventureModule implements AdventureModule
         return (ParserRuleContext) outerContext.getChild(0);
     }
 
-    protected Action convertAction(ParserRuleContext outerContext) {
+    protected Action convertAction(ParserRuleContext outerContext, Adventure adventure) {
         ParserRuleContext innerContext = this.extractInnerContext(outerContext);
         AntlrActionConverter<ParserRuleContext, Action> actionConverter = this.getActionConverter(innerContext);
-        return actionConverter.convert(innerContext);
+        return actionConverter.convert(innerContext, adventure);
     }
 
     protected String getParserRuleName() {
@@ -91,15 +93,20 @@ public abstract class AbstractAntlrDslAdventureModule implements AdventureModule
     }
 
     @Override
-    public Optional<Action> parseForAction(String input) {
+    public Optional<Action> parseForAction(String input, Adventure adventure) {
         // TODO: set the lexer and parser to fail upon errors!
         try {
             Lexer lexer = this.getLexer(CharStreams.fromString(input));
             Parser parser = this.getParser(new CommonTokenStream(lexer));
             Method parseMethod = parser.getClass().getMethod(this.getParserRuleName());
             ParserRuleContext context = (ParserRuleContext) parseMethod.invoke(parser);
-            return Optional.of(this.convertAction(context));
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            if (context.exception != null) {
+                // TODO: config antlr to throw this
+                throw context.exception;
+            }
+            return Optional.of(this.convertAction(context, adventure));
+        } catch (RecognitionException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e) {
             // TODO: debug logging of exception
             e.printStackTrace();
             return Optional.empty();

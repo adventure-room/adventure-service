@@ -20,4 +20,14 @@ public class Adventure extends AbstractDescribable {
     public Map<String, Character> characters = new HashMap<>();
     public Map<Class<? extends Resource>, Map<String, Resource>> resources = new HashMap<>();
 
+    @SuppressWarnings("unchecked")
+    public <C extends Character> C getCharacter(String id) {
+        return (C) this.characters.get(id);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <R extends Resource> R getResource(Class<R> clazz, String id) {
+        return (R) this.resources.get(clazz).get(id);
+    }
+
 }

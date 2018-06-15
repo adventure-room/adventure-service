@@ -140,32 +140,40 @@ public class AdventureLoader {
             PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(moduleConfigPropertiesFile), module.getConfig(), this.conversionService);
 
             // Load characters
-            File[] requiredModuleCharacterSuppliers = new File(moduleBasePath + "characters").listFiles(File::isDirectory);
-            for (File requiredModuleCharacterSupplier : requiredModuleCharacterSuppliers) {
-                if (!module.getConfig().characterDescriptors.containsKey(requiredModuleCharacterSupplier.getName())) {
-                    throw new IllegalStateException(
-                            "Required character supplier: '" + requiredModuleCharacterSupplier.getName() + "' not found in module: '" + requiredModuleId + "'");
-                }
-                CharacterDescriptor characterDescriptor = module.getConfig().characterDescriptors.get(requiredModuleCharacterSupplier.getName());
-                for (File characterDefinition : requiredModuleCharacterSupplier.listFiles()) {
-                    Character character = (Character) PropertiesUtil.loadPropertiesIntoFields(
-                            new FileInputStream(characterDefinition), characterDescriptor.clazz, this.conversionService);
-                    System.out.println("Character: " + character);
+            File charactersFolder = new File(moduleBasePath + "characters");
+            if (charactersFolder.exists()) {
+                File[] requiredModuleCharacterSuppliers = charactersFolder.listFiles(File::isDirectory);
+                for (File requiredModuleCharacterSupplier : requiredModuleCharacterSuppliers) {
+                    if (!module.getConfig().characterDescriptors.containsKey(requiredModuleCharacterSupplier.getName())) {
+                        throw new IllegalStateException(
+                                "Required character supplier: '" + requiredModuleCharacterSupplier.getName() + "' not found in module: '" + requiredModuleId
+                                        + "'");
+                    }
+                    CharacterDescriptor characterDescriptor = module.getConfig().characterDescriptors.get(requiredModuleCharacterSupplier.getName());
+                    for (File characterDefinition : requiredModuleCharacterSupplier.listFiles()) {
+                        Character character = (Character) PropertiesUtil.loadPropertiesIntoFields(
+                                new FileInputStream(characterDefinition), characterDescriptor.clazz, this.conversionService);
+                        System.out.println("Character: " + character);
+                        adventure.characters.put(character.getId(), character);
+                    }
                 }
             }
 
             // Load resources of module
-            File[] requiredModuleResources = new File(moduleBasePath + "resources").listFiles(File::isDirectory);
-            for (File requiredModuleResource : requiredModuleResources) {
-                if (!module.getConfig().resourceDescriptors.containsKey(requiredModuleResource.getName())) {
-                    throw new IllegalStateException(
-                            "Required resource: '" + requiredModuleResource.getName() + "' not found in module: '" + requiredModuleId + "'");
-                }
-                ResourceDescriptor resourceDescriptor = module.getConfig().resourceDescriptors.get(requiredModuleResource.getName());
-                for (File resourceDefinition : requiredModuleResource.listFiles()) {
-                    Resource resource = (Resource) PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(resourceDefinition),
-                            resourceDescriptor.clazz, this.conversionService);
-                    System.out.println("Resource: " + resource);
+            File resourcesFolder = new File(moduleBasePath + "resources");
+            if (resourcesFolder.exists()) {
+                File[] requiredModuleResources = resourcesFolder.listFiles(File::isDirectory);
+                for (File requiredModuleResource : requiredModuleResources) {
+                    if (!module.getConfig().resourceDescriptors.containsKey(requiredModuleResource.getName())) {
+                        throw new IllegalStateException(
+                                "Required resource: '" + requiredModuleResource.getName() + "' not found in module: '" + requiredModuleId + "'");
+                    }
+                    ResourceDescriptor resourceDescriptor = module.getConfig().resourceDescriptors.get(requiredModuleResource.getName());
+                    for (File resourceDefinition : requiredModuleResource.listFiles()) {
+                        Resource resource = (Resource) PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(resourceDefinition),
+                                resourceDescriptor.clazz, this.conversionService);
+                        System.out.println("Resource: " + resource);
+                    }
                 }
             }
 
@@ -199,7 +207,7 @@ public class AdventureLoader {
                 if (!trimmedLine.equals("") && !trimmedLine.startsWith("//")) {
                     // TODO: streamify!
                     for (AdventureModule adventureModule : adventure.modules.values()) {
-                        Optional<Action> optionalAction = adventureModule.parseForAction(trimmedLine);
+                        Optional<Action> optionalAction = adventureModule.parseForAction(trimmedLine, adventure);
                         if (optionalAction.isPresent()) {
                             System.out.println("Action: '" + optionalAction.get() + "' found with module: '" + adventureModule + " when parsing line: '"
                                     + trimmedLine + "'");
