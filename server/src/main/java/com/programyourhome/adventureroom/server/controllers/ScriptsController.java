@@ -27,7 +27,7 @@ public class ScriptsController {
     @RequestMapping("")
     public Collection<Describable> listScripts() {
         // TODO: generify and put into abstract adventure room controller
-        return StreamEx.of(this.adventureService.getActiveAdventure().adventure.scripts)
+        return StreamEx.of(this.adventureService.getActiveAdventure().adventure.scripts.values())
                 .map(script -> this.objectConverter.convert(script, Describable.class))
                 .toSet();
     }

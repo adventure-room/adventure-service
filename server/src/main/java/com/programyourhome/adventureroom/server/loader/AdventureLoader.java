@@ -121,6 +121,7 @@ public class AdventureLoader {
             }
 
             // Load scripts
+            // TODO: verify required modules
             String scriptsBasePath = adventurePath + "/scripts/";
             FileUtil.assertDirectoryExists(scriptsBasePath);
             File[] scriptFiles = new File(scriptsBasePath).listFiles();
@@ -144,7 +145,7 @@ public class AdventureLoader {
                 }
                 for (String line : lines) {
                     String trimmedLine = line.trim();
-                    if (!trimmedLine.equals("") && !trimmedLine.startsWith("//")) {
+                    if (!trimmedLine.equals("") && !trimmedLine.startsWith("#")) {
                         // TODO: streamify!
                         for (AdventureModule adventureModule : adventure.modules.values()) {
                             Optional<Action> optionalAction = adventureModule.parseForAction(trimmedLine, adventure);

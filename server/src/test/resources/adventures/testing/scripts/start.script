@@ -1,11 +1,13 @@
 id = start
 name = Start Adventure
 description = Set the scene with a suspense introduction
-requiredModules = philipshue, amazonpolly, piwall, immmerse
+requiredModules = common, philipshue, amazonpolly, immerse
 
 ---
 
-dim the lights to 10
-pete says "Welcome to the adventure"
-turn off the lights
+play background music chill
+#dim the lights to 10
+#pete says "Welcome to the adventure"
+#casey says "Thank you!"
+#turn off the lights
 
