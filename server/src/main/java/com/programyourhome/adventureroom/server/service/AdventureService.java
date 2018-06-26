@@ -55,9 +55,8 @@ public class AdventureService {
         this.activeAdventure.adventure = adventure;
         this.activeAdventure.executionContext = new ExecutionContext(adventure);
 
-        this.startModules(adventure);
-
         this.eventManager.resetForAdventure(adventure);
+        this.startModules(adventure);
         this.eventManager.fireEvent(new AdventureStartedEvent(adventure.getId()));
     }
 
@@ -81,11 +80,11 @@ public class AdventureService {
     }
 
     private void handleTaskException(Task task, Throwable throwable) {
+        // TODO: log
+        throwable.printStackTrace();
         if (task.failOnException()) {
             this.stopAdventure();
             throw new IllegalStateException("Module task failed", throwable);
-        } else {
-            // TODO: just log exception
         }
     }
 
