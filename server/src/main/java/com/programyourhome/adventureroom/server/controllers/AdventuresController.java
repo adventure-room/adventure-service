@@ -2,7 +2,6 @@ package com.programyourhome.adventureroom.server.controllers;
 
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,12 +27,6 @@ public class AdventuresController {
 
     @Inject
     private ObjectConverter objectConverter;
-
-    // TODO: TEMP ALWAYS START FOR TESTING
-    @PostConstruct
-    public void tempAlwaysStart() {
-        this.adventureService.startAdventure(this.adventureRepository.getAdventures().iterator().next());
-    }
 
     @RequestMapping("")
     public Set<Describable> listAdventures() {

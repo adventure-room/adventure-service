@@ -5,7 +5,7 @@ import java.util.Set;
 import com.programyourhome.adventureroom.model.AbstractTypeDescribable;
 import com.programyourhome.adventureroom.model.Language;
 
-public class CharacterDescriptor extends AbstractTypeDescribable {
+public class CharacterDescriptor<C extends Character> extends AbstractTypeDescribable<C> {
 
     public String textToSpeechService;
 

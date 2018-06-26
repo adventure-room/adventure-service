@@ -17,6 +17,10 @@ public class MatchResult {
         return this.matcher.group(0);
     }
 
+    public String getValue(RegexVariable regexVariable) {
+        return this.getValue(regexVariable.name);
+    }
+
     public String getValue(String parameterName) {
         return this.matcher.group(parameterName);
     }

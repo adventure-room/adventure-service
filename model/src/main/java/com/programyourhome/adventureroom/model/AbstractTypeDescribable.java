@@ -1,7 +1,7 @@
 package com.programyourhome.adventureroom.model;
 
-public abstract class AbstractTypeDescribable extends AbstractDescribable {
+public abstract class AbstractTypeDescribable<T> extends AbstractDescribable {
 
-    public Class<?> clazz;
+    public Class<T> clazz;
 
 }

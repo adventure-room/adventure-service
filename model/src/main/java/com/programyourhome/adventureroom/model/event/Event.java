@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public abstract class Event {
 
@@ -30,11 +31,21 @@ public abstract class Event {
     }
 
     /**
+     * Hashcode based on all fields in the subclass.
+     * Excludes id, timestamp and message.
+     */
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this, "id", "timestamp", "message");
+    }
+
+    /**
      * Equals based on all fields in the subclass.
      * Excludes id, timestamp and message.
      */
-    public boolean paramEquals(Event event) {
-        return EqualsBuilder.reflectionEquals(this, event, "id", "timestamp", "message");
+    @Override
+    public boolean equals(Object object) {
+        return EqualsBuilder.reflectionEquals(this, object, "id", "timestamp", "message");
     }
 
 }

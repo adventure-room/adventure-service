@@ -27,14 +27,14 @@ public class ScriptsController {
     @RequestMapping("")
     public Collection<Describable> listScripts() {
         // TODO: generify and put into abstract adventure room controller
-        return StreamEx.of(this.adventureService.getActiveAdventure().adventure.scripts.values())
+        return StreamEx.of(this.adventureService.getActiveAdventure().adventure.getScripts())
                 .map(script -> this.objectConverter.convert(script, Describable.class))
                 .toSet();
     }
 
     @RequestMapping("{id}")
     public Describable getScript(@PathVariable("id") final String id) {
-        Script script = this.adventureService.getActiveAdventure().adventure.scripts.get(id);
+        Script script = this.adventureService.getActiveAdventure().adventure.getScript(id);
         return this.objectConverter.convert(script, Describable.class);
     }
 
@@ -42,7 +42,7 @@ public class ScriptsController {
     @RequestMapping("{id}/run")
     public void runScript(@PathVariable("id") final String id) {
         // TODO: private helper method for getScript
-        this.adventureService.runScript(this.adventureService.getActiveAdventure().adventure.scripts.get(id));
+        this.adventureService.runScript(this.adventureService.getActiveAdventure().adventure.getScript(id));
     }
 
 }

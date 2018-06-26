@@ -1,0 +1,12 @@
+id = start
+name = Start Adventure
+requiredModules = common, amazonpolly, immerse, sparrenburcht
+
+---
+
+#pete says "This is speaker 1" at 1
+#pete says "This is speaker 2" at 2
+
+play background music chill
+wait 10 seconds
+stop background music
