@@ -17,24 +17,24 @@
 	<dependencies>
 		<!-- TEMP DIRECT DEPENDENCY ON SERVICE IMPL TO GET TRANSITIVE DEPS -->
 		<dependency>
-			<groupId>com.programyourhome.adventureroom.philipshue</groupId>
+			<groupId>com.programyourhome.adventureroom.module.philipshue</groupId>
 			<artifactId>service-impl</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.programyourhome.adventureroom.amazonpolly</groupId>
+			<groupId>com.programyourhome.adventureroom.module.amazonpolly</groupId>
 			<artifactId>service-impl</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.programyourhome.adventureroom.immerse</groupId>
+			<groupId>com.programyourhome.adventureroom.module.immerse</groupId>
 			<artifactId>service-impl</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.programyourhome.adventureroom.sparrenburcht</groupId>
+			<groupId>com.programyourhome.adventureroom.module.sparrenburcht</groupId>
 			<artifactId>module</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 	
 		<dependency>
