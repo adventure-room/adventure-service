@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
@@ -38,6 +39,10 @@ import com.programyourhome.adventureroom.model.resource.ResourceDescriptor;
 import com.programyourhome.adventureroom.model.script.Script;
 import com.programyourhome.adventureroom.model.script.action.Action;
 import com.programyourhome.adventureroom.model.script.action.ActionData;
+import com.programyourhome.adventureroom.model.toolbox.CacheService;
+import com.programyourhome.adventureroom.model.toolbox.DataStreamToUrl;
+import com.programyourhome.adventureroom.model.toolbox.Toolbox;
+import com.programyourhome.adventureroom.model.toolbox.ToolboxImpl;
 import com.programyourhome.adventureroom.server.util.FileUtil;
 import com.programyourhome.adventureroom.server.util.PropertiesUtil;
 import com.programyourhome.adventureroom.server.util.StreamUtil;
@@ -52,11 +57,23 @@ public class AdventureLoader {
     @Inject
     private GenericConversionService conversionService;
 
+    @Inject
+    private CacheService cacheService;
+
+    @Inject
+    private DataStreamToUrl dataStreamToUrl;
+
     private final Map<String, AdventureModule> availableModules;
 
     public AdventureLoader() {
         this.availableModules = StreamEx.of(ServiceLoader.load(AdventureModule.class).iterator())
                 .toMap(module -> module.getConfig().getId(), module -> module);
+    }
+
+    @PostConstruct
+    public void init() {
+        Toolbox toolbox = new ToolboxImpl(this.cacheService, this.dataStreamToUrl);
+        this.availableModules.values().forEach(module -> module.setToolbox(toolbox));
     }
 
     public Map<String, Adventure> loadAdventures(String adventureBasepath) {
@@ -113,6 +130,12 @@ public class AdventureLoader {
             if (!this.availableModules.keySet().contains(requiredModuleId)) {
                 throw new IllegalStateException("Required module: '" + requiredModuleId + "' not present");
             }
+            // FIXME: This is currently wrong! Since module config can differ per adventure, but that should be restructured anyway...
+            // Question: Will there still be valid situations possible where the module config does differ per adventure?
+            // Answer: maybe, so introduce 2-way init-start-stop-shutdown. Always init/shutdown for all available modules
+            // But only start-stop upon every adventure start/stop. In case connection might be unavailable if module not used:
+            // connect at start/stop (control board / removable items). If system should always be in the room / attached to the room:
+            // connect at init/shutdown (philips hue, immerse, screens)
             AdventureModule module = this.availableModules.get(requiredModuleId);
 
             String moduleBasePath = adventurePath.getAbsolutePath() + "/modules/" + requiredModuleId + "/";

@@ -4,8 +4,33 @@ requiredModules = common, amazonpolly, immerse, sparrenburcht
 
 ---
 
+#pete says "This is a test"
+
 pete says "This is speaker 1" at 1
-pete says "This is speaker 2" at 2
+pete says "2" at 2
+pete says "3" at 3
+pete says "4" at 4
+pete says "5" at 5
+pete says "6" at 6 
+pete says "7" at 7
+pete says "8" at 8
+pete says "9" at 9
+pete says "10" at 10
+pete says "11" at 11
+pete says "12" at 12
+
+#pete says "This is speaker 1" at 1 &
+#pete says "This is speaker 2" at 2 &
+#pete says "This is speaker 3" at 3 &
+#pete says "This is speaker 4" at 4 &
+#pete says "This is speaker 5" at 5 &
+#pete says "This is speaker 6" at 6 
+#pete says "This is speaker 7" at 7
+#pete says "This is speaker 8" at 8
+#pete says "This is speaker 9" at 9
+#pete says "This is speaker 10" at 10
+#pete says "This is speaker 11" at 11
+#pete says "This is speaker 12" at 12
 
 #play background music chill
 #wait 10 seconds
