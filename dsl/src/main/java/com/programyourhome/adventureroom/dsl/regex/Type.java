@@ -3,6 +3,7 @@ package com.programyourhome.adventureroom.dsl.regex;
 public enum Type {
 
     ID("[a-z0-9]+"),
+    ID_LIST(ID.regex + "(," + ID.regex + ")*"),
     INTEGER("[0-9]+"),
     DOUBLE("[0-9]+(\\.[0-9]+)?"),
     NAME("[a-z]+"),

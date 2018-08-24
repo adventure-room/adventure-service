@@ -11,6 +11,7 @@ import java.io.Writer;
  * Excerpt from the IOUtils class from Apache Commons.
  * Cropped to the only methods needed.
  * Included here to not bring in the full dependency.
+ * Also added some other IO util methods.
  */
 public class IOUtil {
 
@@ -92,8 +93,7 @@ public class IOUtil {
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
      */
-    public static long copy(final InputStream input, final OutputStream output, final int bufferSize)
-            throws IOException {
+    public static long copy(final InputStream input, final OutputStream output, final int bufferSize) throws IOException {
         return copyLarge(input, output, new byte[bufferSize]);
     }
 
@@ -112,8 +112,7 @@ public class IOUtil {
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
      */
-    public static long copyLarge(final InputStream input, final OutputStream output)
-            throws IOException {
+    public static long copyLarge(final InputStream input, final OutputStream output) throws IOException {
         return copy(input, output, DEFAULT_BUFFER_SIZE);
     }
 
@@ -132,8 +131,7 @@ public class IOUtil {
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
      */
-    public static long copyLarge(final InputStream input, final OutputStream output, final byte[] buffer)
-            throws IOException {
+    public static long copyLarge(final InputStream input, final OutputStream output, final byte[] buffer) throws IOException {
         long count = 0;
         int n;
         while (EOF != (n = input.read(buffer))) {
@@ -141,6 +139,22 @@ public class IOUtil {
             count += n;
         }
         return count;
+    }
+
+    /**
+     * Skip all bytes available in the stream.
+     * Because some streams might not return the full number of bytes available when the buffer is large (like AudioInputStream,
+     * that will only return a number up to half a second of audio data), we keep skipping the available bytes in a loop,
+     * until available() returns 0.
+     *
+     * @param inputStream the input stream to skip from
+     * @throws IOException if skip() or available() throw an IOException
+     */
+    public static void skipAllAvailable(InputStream inputStream) throws IOException {
+        long amountSkipped;
+        do {
+            amountSkipped = inputStream.skip(inputStream.available());
+        } while (amountSkipped > 0);
     }
 
 }
