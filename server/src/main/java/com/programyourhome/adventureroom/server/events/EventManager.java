@@ -24,7 +24,7 @@ public class EventManager {
     public void fireEvent(Event event) {
         // TODO: handle in new thread?!?
         this.adventure.getModules().forEach(module -> module.handleEvent(event));
-        this.adventure.getTriggeredScripts(event).forEach(this.adventureService::runScript);
+        this.adventure.getTriggeredScripts(event).forEach(script -> this.adventureService.runScript(this.adventure, script));
     }
 
 }

@@ -1,7 +1,9 @@
 package com.programyourhome.adventureroom.server.service;
 
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -95,36 +97,61 @@ public class AdventureService {
         this.eventManager.fireEvent(new AdventureStopEvent(this.activeAdventure.adventure.getId()));
         // TODO: Find better mechanism for stopping script runners.
         this.scriptRunners.forEach(Thread::stop);
+        this.scriptRunners.clear();
         this.activeAdventure.adventure.getModules().forEach(AdventureModule::stop);
         this.activeAdventure = null;
     }
 
-    // TODO: how to check the script is from the active adventure? loop and check
-    public void runScript(Script script) {
-        Thread scriptRunner = new Thread(() -> this.runScriptSynchronous(script), "Running script [" + script.getName() + "]");
+    public void runScript(Adventure adventure, Script script) {
+        if (this.hasActiveAdventure() && !this.activeAdventure.adventure.equals(adventure)) {
+            throw new IllegalStateException("Can only run scripts of the active adventure (or when no adventure is active)");
+        }
+        if (!this.hasActiveAdventure() && !this.scriptRunners.isEmpty()) {
+            throw new IllegalStateException("Can only test-run one script at a time in isolation");
+        }
+        // TODO: find a nicer solution for this.
+        List<Thread> finalThreadList = new ArrayList<>();
+        Thread scriptRunner = new Thread(() -> {
+            try {
+                this.runScriptSynchronous(adventure, script);
+            } finally {
+                // Make sure the script runner is always removed after the script is done.
+                this.scriptRunners.remove(finalThreadList.get(0));
+            }
+        });
+        finalThreadList.add(scriptRunner);
+        scriptRunner.setName("Running script [" + script.getName() + "]");
         scriptRunner.setUncaughtExceptionHandler(this.handleActionException);
         this.scriptRunners.add(scriptRunner);
         scriptRunner.start();
     }
 
-    private void runScriptSynchronous(Script script) {
+    private void runScriptSynchronous(Adventure adventure, Script script) {
+        ExecutionContext executionContext;
+        if (this.hasActiveAdventure()) {
+            executionContext = this.activeAdventure.executionContext;
+        } else {
+            // No adventure is running: create a new execution context for running the script.
+            // TODO: start modules 'new style' and stop after script is done!
+            executionContext = new ExecutionContext(adventure);
+        }
         script.actions.forEach(actionData -> {
             if (actionData.synchronous) {
-                this.executeAction(actionData.action);
+                this.executeAction(actionData.action, executionContext);
             } else {
-                Thread asyncActionExecutor = new Thread(() -> this.executeAction(actionData.action));
+                Thread asyncActionExecutor = new Thread(() -> this.executeAction(actionData.action, executionContext));
                 asyncActionExecutor.setUncaughtExceptionHandler(this.handleActionException);
                 asyncActionExecutor.start();
             }
         });
     }
 
-    private <A extends Action> void executeAction(A action) {
+    private <A extends Action> void executeAction(A action, ExecutionContext executionContext) {
         String actionClassName = action.getClass().getName();
         String actionExecutorClassName = actionClassName.replace(".model.", ".executor.") + "Executor";
         Class<? extends ActionExecutor<A>> actionExecutorClass = ReflectionUtil.classForNameNoCheckedException(actionExecutorClassName);
         ActionExecutor<A> actionExecutor = ReflectionUtil.callConstructorNoCheckedException(actionExecutorClass);
-        actionExecutor.execute(action, this.activeAdventure.executionContext);
+        actionExecutor.execute(action, executionContext);
     }
 
 }

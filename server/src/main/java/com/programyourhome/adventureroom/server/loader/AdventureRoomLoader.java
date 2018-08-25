@@ -18,13 +18,16 @@ import java.util.ServiceLoader;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.stereotype.Component;
 
 import com.programyourhome.adventureroom.dsl.util.ReflectionUtil;
 import com.programyourhome.adventureroom.model.Adventure;
+import com.programyourhome.adventureroom.model.Room;
 import com.programyourhome.adventureroom.model.character.Character;
 import com.programyourhome.adventureroom.model.character.CharacterDescriptor;
 import com.programyourhome.adventureroom.model.event.AdventureStartedEvent;
@@ -50,9 +53,15 @@ import com.programyourhome.adventureroom.server.util.StreamUtil;
 import one.util.streamex.StreamEx;
 
 @Component
-public class AdventureLoader {
+public class AdventureRoomLoader {
 
+    public static final String ROOM_PROPERTIES_FILENAME = "room.properties";
+    public static final String ADVENTURES_DIRECTORY_NAME = "adventures";
     public static final String ADVENTURE_PROPERTIES_FILENAME = "adventure.properties";
+    public static final String MODULE_PROPERTIES_FILENAME = "module.properties";
+
+    @Value("${rooms.tempMergePath}")
+    private String roomsTempMergePath;
 
     @Inject
     private GenericConversionService conversionService;
@@ -65,29 +74,79 @@ public class AdventureLoader {
 
     private final Map<String, AdventureModule> availableModules;
 
-    public AdventureLoader() {
+    public AdventureRoomLoader() {
         this.availableModules = StreamEx.of(ServiceLoader.load(AdventureModule.class).iterator())
                 .toMap(module -> module.getConfig().getId(), module -> module);
     }
 
     @PostConstruct
     public void init() {
+        // Create a toolbox that gives access to the different services of the server.
         Toolbox toolbox = new ToolboxImpl(this.cacheService, this.dataStreamToUrl);
+        // Since the modules don't use Spring, the toolbox is 'injected' with the setter.
         this.availableModules.values().forEach(module -> module.setToolbox(toolbox));
     }
 
-    public Map<String, Adventure> loadAdventures(String adventureBasepath) {
-        FileUtil.assertDirectoryExists(adventureBasepath);
-        return StreamEx.of(this.getAdventurePaths(adventureBasepath))
+    public Map<String, Room> loadRooms(String roomsBasepath) {
+        FileUtil.assertDirectoryExists(roomsBasepath);
+        return StreamEx.of(this.getRoomPaths(roomsBasepath))
+                .map(this::loadRoom)
+                .toMap(Room::getId, a -> a);
+    }
+
+    private List<File> getRoomPaths(String roomsBasepath) {
+        return Arrays.asList(new File(roomsBasepath).listFiles(File::isDirectory));
+    }
+
+    public Room loadRoom(File roomPath) {
+        try {
+            roomPath = this.mergeRoomConfigIntoAdventures(roomPath);
+            FileUtil.assertDirectoryExists(roomPath);
+            File roomPropertiesFile = new File(roomPath.getAbsolutePath() + "/" + ROOM_PROPERTIES_FILENAME);
+            FileUtil.assertFileExists(roomPropertiesFile);
+
+            Room room = PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(roomPropertiesFile), Room.class, this.conversionService);
+            room.adventures = this.loadAdventures(roomPath + "/" + ADVENTURES_DIRECTORY_NAME);
+            return room;
+        } catch (IOException e) {
+            throw new IllegalStateException("Exception during loading of room", e);
+        }
+    }
+
+    private File mergeRoomConfigIntoAdventures(File roomPath) throws IOException {
+        File mergePath = new File(this.roomsTempMergePath + "/" + System.currentTimeMillis() + "/" + roomPath.getName());
+        if (!mergePath.mkdirs()) {
+            throw new IllegalStateException("Could not create rooms temp merge path: " + this.roomsTempMergePath);
+        }
+        FileUtils.copyDirectory(roomPath, mergePath);
+        for (File adventurePath : new File(mergePath + "/adventures").listFiles(File::isDirectory)) {
+            for (File moduleConfigPath : new File(mergePath + "/modules").listFiles(File::isDirectory)) {
+                File adventureModuleConfigPath = new File(adventurePath.getAbsolutePath() + "/modules/" + moduleConfigPath.getName());
+                if (adventureModuleConfigPath.exists()) {
+                    // Little trick: If the adventure module also has it's own config,
+                    // first copy the adventure module config over the room module config
+                    // to overwrite any duplicate files in favor of the adventure module.
+                    FileUtils.copyDirectory(adventureModuleConfigPath, moduleConfigPath);
+                }
+                // Then copy the whole thing back into the adventure module, so it can be read by the adventure loading.
+                FileUtils.copyDirectory(moduleConfigPath, adventureModuleConfigPath);
+            }
+        }
+        return mergePath;
+    }
+
+    private Map<String, Adventure> loadAdventures(String adventuresBasepath) {
+        FileUtil.assertDirectoryExists(adventuresBasepath);
+        return StreamEx.of(this.getAdventurePaths(adventuresBasepath))
                 .map(this::loadAdventure)
                 .toMap(Adventure::getId, a -> a);
     }
 
-    private List<File> getAdventurePaths(String adventureBasepath) {
-        return Arrays.asList(new File(adventureBasepath).listFiles(File::isDirectory));
+    private List<File> getAdventurePaths(String adventuresBasepath) {
+        return Arrays.asList(new File(adventuresBasepath).listFiles(File::isDirectory));
     }
 
-    public Adventure loadAdventure(File adventurePath) {
+    private Adventure loadAdventure(File adventurePath) {
         try {
             Adventure adventure = this.loadAdventureBase(adventurePath);
 
@@ -107,8 +166,7 @@ public class AdventureLoader {
         File adventurePropertiesFile = new File(adventurePath.getAbsolutePath() + "/" + ADVENTURE_PROPERTIES_FILENAME);
         FileUtil.assertFileExists(adventurePropertiesFile);
 
-        return PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(adventurePropertiesFile), Adventure.class,
-                this.conversionService);
+        return PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(adventurePropertiesFile), Adventure.class, this.conversionService);
     }
 
     private void loadBaseAvailableEvents(Map<String, EventDescriptor<? extends Event>> availableEvents) {
@@ -158,7 +216,7 @@ public class AdventureLoader {
 
     private void loadModuleBase(String moduleBasePath, AdventureModule module) throws IOException {
         FileUtil.assertDirectoryExists(moduleBasePath);
-        File moduleConfigPropertiesFile = new File(moduleBasePath + "module.properties");
+        File moduleConfigPropertiesFile = new File(moduleBasePath + "/" + MODULE_PROPERTIES_FILENAME);
         FileUtil.assertFileExists(moduleConfigPropertiesFile);
         PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(moduleConfigPropertiesFile), module.getConfig(), this.conversionService);
     }

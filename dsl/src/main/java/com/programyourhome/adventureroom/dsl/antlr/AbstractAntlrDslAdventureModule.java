@@ -67,8 +67,8 @@ public abstract class AbstractAntlrDslAdventureModule implements AdventureModule
 
     protected AntlrActionConverter<ParserRuleContext, Action> getActionConverter(ParserRuleContext context) {
         String childContextClassSimpleName = context.getClass().getSimpleName();
-        String actionConverterClassName = ADVENTURE_ROOM_PACKAGE_NAME + "." + this.dslIdLowerCase + "." +
-                DSL_PACKAGE_NAME + "." + CONVERTERS_PACKAGE_NAME + "." + childContextClassSimpleName.replace("Context", "Converter");
+        String actionConverterClassName = ADVENTURE_ROOM_PACKAGE_NAME + "." + this.dslIdLowerCase + "."
+                + DSL_PACKAGE_NAME + "." + CONVERTERS_PACKAGE_NAME + "." + childContextClassSimpleName.replace("Context", "Converter");
         Class<? extends AntlrActionConverter<ParserRuleContext, Action>> actionConverterClass = ReflectionUtil
                 .classForNameNoCheckedException(actionConverterClassName);
         return ReflectionUtil.callConstructorNoCheckedException(actionConverterClass);
