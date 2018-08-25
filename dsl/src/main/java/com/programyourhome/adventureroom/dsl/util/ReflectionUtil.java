@@ -6,6 +6,7 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class ReflectionUtil {
         return callConstructorNoCheckedException(clazz, new Class<?>[] { parameterType }, new Object[] { argument });
     }
 
-    public static Object callConstructorNoCheckedExceptionNoTypes(Class<?> clazz, Class<?> externalClass, Object externalObject) {
+    public static Object callConstructorNoCheckedExceptionUntypedParameter(Class<?> clazz, Class<?> externalClass, Object externalObject) {
         return callConstructorNoCheckedException(clazz, new Class<?>[] { externalClass }, new Object[] { externalObject });
     }
 
@@ -88,8 +89,14 @@ public class ReflectionUtil {
     }
 
     public static Class<?> getGenericParameter(Class<?> baseClass, Class<?> typedClass) {
-        if (typedClass.getTypeParameters().length != 1) {
-            throw new IllegalStateException("Typed class [" + typedClass + "] should contain exactly one type parameter");
+        return getGenericParameter(baseClass, Arrays.asList(typedClass));
+    }
+
+    public static Class<?> getGenericParameter(Class<?> baseClass, Collection<Class<?>> typedClasses) {
+        for (Class<?> typedClass : typedClasses) {
+            if (typedClass.getTypeParameters().length != 1) {
+                throw new IllegalStateException("Typed class [" + typedClass + "] should contain exactly one type parameter");
+            }
         }
         Set<Type> superTypes = new HashSet<>();
         populateSuperTypes(baseClass, superTypes);
@@ -97,10 +104,10 @@ public class ReflectionUtil {
         return StreamEx.of(superTypes)
                 .filter(type -> type instanceof ParameterizedType)
                 .map(type -> (ParameterizedType) type)
-                .filter(type -> type.getRawType() == typedClass)
+                .filter(type -> typedClasses.contains(type.getRawType()))
                 .filter(type -> type.getActualTypeArguments()[0] instanceof Class)
                 .map(type -> (Class<?>) type.getActualTypeArguments()[0])
-                .findFirst().orElseThrow(() -> new IllegalStateException("Typed class [" + typedClass + "] not found in hierarchy of [" + baseClass + "] "
+                .findFirst().orElseThrow(() -> new IllegalStateException("Typed classes " + typedClasses + " not found in hierarchy of [" + baseClass + "] "
                         + "or type parameter is not instantiated"));
     }
 

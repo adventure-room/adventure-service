@@ -1,0 +1,18 @@
+id = test
+name = Test Features
+description = Just for testing the system and new features
+requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
+
+---
+
+#TODO: speak at immerse (so config speakers) but first be able to config whole of immerse through module resources (speakers, room, sound cards, etc)
+pete says "Welcome to the adventure"
+
+#play background music chill
+#dim the lights to 10
+#color light testlight1 to purple
+#pete says "Welcome to the adventure"
+#casey says "Thank you!"
+#wait 2 seconds
+#turn off the lights
+#stop background music

@@ -102,7 +102,7 @@ public class AdventureService {
         this.activeAdventure = null;
     }
 
-    public void runScript(Adventure adventure, Script script) {
+    public synchronized void runScript(Adventure adventure, Script script) {
         if (this.hasActiveAdventure() && !this.activeAdventure.adventure.equals(adventure)) {
             throw new IllegalStateException("Can only run scripts of the active adventure (or when no adventure is active)");
         }
@@ -131,8 +131,8 @@ public class AdventureService {
         if (this.hasActiveAdventure()) {
             executionContext = this.activeAdventure.executionContext;
         } else {
-            // No adventure is running: create a new execution context for running the script.
-            // TODO: start modules 'new style' and stop after script is done!
+            // No adventure is running: run the script in 'isolation' (feature for testing).
+            this.startModules(adventure);
             executionContext = new ExecutionContext(adventure);
         }
         script.actions.forEach(actionData -> {
@@ -144,6 +144,10 @@ public class AdventureService {
                 asyncActionExecutor.start();
             }
         });
+        if (!this.hasActiveAdventure()) {
+            // Stop the isolation run.
+            adventure.getModules().forEach(AdventureModule::stop);
+        }
     }
 
     private <A extends Action> void executeAction(A action, ExecutionContext executionContext) {

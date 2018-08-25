@@ -36,6 +36,7 @@ import com.programyourhome.adventureroom.model.event.Event;
 import com.programyourhome.adventureroom.model.event.EventDescriptor;
 import com.programyourhome.adventureroom.model.module.AdventureModule;
 import com.programyourhome.adventureroom.model.module.Converter;
+import com.programyourhome.adventureroom.model.resource.AbstractExternalResource;
 import com.programyourhome.adventureroom.model.resource.ExternalResource;
 import com.programyourhome.adventureroom.model.resource.Resource;
 import com.programyourhome.adventureroom.model.resource.ResourceDescriptor;
@@ -72,19 +73,22 @@ public class AdventureRoomLoader {
     @Inject
     private DataStreamToUrl dataStreamToUrl;
 
-    private final Map<String, AdventureModule> availableModules;
+    private final Map<String, Class<? extends AdventureModule>> availableModules;
+    private Toolbox toolbox;
 
     public AdventureRoomLoader() {
         this.availableModules = StreamEx.of(ServiceLoader.load(AdventureModule.class).iterator())
-                .toMap(module -> module.getConfig().getId(), module -> module);
+                .toMap(module -> module.getConfig().getId(), module -> module.getClass());
     }
 
     @PostConstruct
     public void init() {
         // Create a toolbox that gives access to the different services of the server.
-        Toolbox toolbox = new ToolboxImpl(this.cacheService, this.dataStreamToUrl);
-        // Since the modules don't use Spring, the toolbox is 'injected' with the setter.
-        this.availableModules.values().forEach(module -> module.setToolbox(toolbox));
+        this.toolbox = new ToolboxImpl(this.cacheService, this.dataStreamToUrl);
+    }
+
+    private AdventureModule createNewModule(String moduleId) {
+        return ReflectionUtil.callConstructorNoCheckedException(this.availableModules.get(moduleId));
     }
 
     public Map<String, Room> loadRooms(String roomsBasepath) {
@@ -186,15 +190,12 @@ public class AdventureRoomLoader {
     private void loadAdventureData(File adventurePath, Adventure adventure, Map<String, EventDescriptor<? extends Event>> availableEvents) throws IOException {
         for (String requiredModuleId : adventure.getRequiredModules()) {
             if (!this.availableModules.keySet().contains(requiredModuleId)) {
-                throw new IllegalStateException("Required module: '" + requiredModuleId + "' not present");
+                throw new IllegalStateException("Required module: '" + requiredModuleId + "' not available");
             }
-            // FIXME: This is currently wrong! Since module config can differ per adventure, but that should be restructured anyway...
-            // Question: Will there still be valid situations possible where the module config does differ per adventure?
-            // Answer: maybe, so introduce 2-way init-start-stop-shutdown. Always init/shutdown for all available modules
-            // But only start-stop upon every adventure start/stop. In case connection might be unavailable if module not used:
-            // connect at start/stop (control board / removable items). If system should always be in the room / attached to the room:
-            // connect at init/shutdown (philips hue, immerse, screens)
-            AdventureModule module = this.availableModules.get(requiredModuleId);
+            // Create a new module instance for each adventure using that module, to allow for different config and state.
+            AdventureModule module = this.createNewModule(requiredModuleId);
+            // Since the modules don't use Spring, the toolbox is 'injected' with the setter.
+            module.setToolbox(this.toolbox);
 
             String moduleBasePath = adventurePath.getAbsolutePath() + "/modules/" + requiredModuleId + "/";
 
@@ -260,10 +261,11 @@ public class AdventureRoomLoader {
                     Class<? extends Resource> resourceClass = resourceDescriptor.clazz;
                     Resource resource;
                     if (ExternalResource.class.isAssignableFrom(resourceClass)) {
-                        Class<?> externalClass = ReflectionUtil.getGenericParameter(resourceClass, ExternalResource.class);
+                        Class<?> externalClass = ReflectionUtil.getGenericParameter(resourceClass,
+                                Arrays.asList(ExternalResource.class, AbstractExternalResource.class));
                         Object externalObject = PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(resourceDefinition),
                                 externalClass, this.conversionService);
-                        resource = (Resource) ReflectionUtil.callConstructorNoCheckedExceptionNoTypes(resourceClass, externalClass, externalObject);
+                        resource = (Resource) ReflectionUtil.callConstructorNoCheckedExceptionUntypedParameter(resourceClass, externalClass, externalObject);
                     } else {
                         resource = PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(resourceDefinition),
                                 resourceClass, this.conversionService);
@@ -288,6 +290,7 @@ public class AdventureRoomLoader {
             String scriptActions = scriptParts[1];
             Script script = PropertiesUtil.loadPropertiesIntoFields(scriptProperties, Script.class, this.conversionService);
             script.requiredModules.forEach(requiredModuleId -> {
+                // TODO: check on adventure req modules, should be superset of script req modules
                 if (!this.availableModules.containsKey(requiredModuleId)) {
                     throw new IllegalStateException("Module [" + requiredModuleId + "] is not available but is required by script [" + script.id + "]");
                 }
