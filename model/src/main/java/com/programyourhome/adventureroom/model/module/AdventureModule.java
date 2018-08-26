@@ -22,7 +22,9 @@ public interface AdventureModule {
         // Default no-op.
     }
 
-    public void stop();
+    public void start(Adventure adventure);
+
+    public void stop(Adventure adventure);
 
     @SuppressWarnings("unchecked")
     public default <Api, Impl extends Api> Impl loadImpl(Class<Api> apiInterface) {

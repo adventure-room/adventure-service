@@ -1,12 +1,12 @@
 package com.programyourhome.adventureroom.server.controllers;
 
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +25,12 @@ public class DataStreamToUrlController implements DataStreamToUrl {
 
     public static final String PATH_PREFIX = "streams";
 
+    @Value("${server.address}")
+    private String serverAddress;
+
+    @Value("${server.port}")
+    private int serverPort;
+
     private final Map<String, DataStream> dataStreams;
 
     public DataStreamToUrlController() {
@@ -33,7 +39,7 @@ public class DataStreamToUrlController implements DataStreamToUrl {
 
     @GetMapping("{id}")
     public ResponseEntity<InputStreamResource> getStream(@PathVariable("id") String id) {
-        // TODO: throw exception if not found.
+        // TODO: throw exception / 404 if not found.
         DataStream dataStream = this.dataStreams.get(id);
         InputStreamResource inputStreamResource = new InputStreamResource(dataStream.getInputStream());
         HttpHeaders headers = new HttpHeaders();
@@ -46,21 +52,10 @@ public class DataStreamToUrlController implements DataStreamToUrl {
     public URL exposeDataStream(DataStream dataStream) {
         UUID id = UUID.randomUUID();
         this.dataStreams.put(id.toString(), dataStream);
-        // TODO: how to dynamically get the serving ip/port from Spring?
         try {
-            return new URL("http://" + "192.168.0.101" + ":" + 19161 + "/" + PATH_PREFIX + "/" + id.toString());
+            return new URL("http://" + this.serverAddress + ":" + this.serverPort + "/" + PATH_PREFIX + "/" + id.toString());
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Exception during creation of URL", e);
-        }
-    }
-
-    private class StreamAndMimeType {
-        public InputStream stream;
-        public String mimeType;
-
-        public StreamAndMimeType(InputStream stream, String mimeType) {
-            this.stream = stream;
-            this.mimeType = mimeType;
         }
     }
 

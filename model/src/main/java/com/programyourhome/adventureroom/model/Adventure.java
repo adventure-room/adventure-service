@@ -64,15 +64,15 @@ public class Adventure extends AbstractDescribable {
     }
 
     public <R extends Resource> Map<String, R> getResourceMap(Class<R> clazz) {
-        return (Map<String, R>) this.resources.get(clazz);
+        return (Map<String, R>) this.resources.getOrDefault(clazz, new HashMap<>());
     }
 
     public <R extends Resource> Collection<R> getResources(Class<R> clazz) {
-        return (Collection<R>) this.resources.get(clazz).values();
+        return this.getResourceMap(clazz).values();
     }
 
     public <R extends Resource> R getResource(Class<R> clazz, String id) {
-        return (R) this.resources.get(clazz).get(id);
+        return this.getResourceMap(clazz).get(id);
     }
 
     public Map<String, Script> getScriptMap() {

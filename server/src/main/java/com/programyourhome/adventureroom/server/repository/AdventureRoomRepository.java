@@ -1,5 +1,6 @@
 package com.programyourhome.adventureroom.server.repository;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +33,10 @@ public class AdventureRoomRepository {
 
     public void reload() {
         this.rooms = this.loader.loadRooms(this.roomsBasepath);
+    }
+
+    public void reloadRoom(String roomId) {
+        this.rooms.put(roomId, this.loader.loadRoom(new File(this.roomsBasepath + "/" + roomId)));
     }
 
     public Map<String, Room> getRoomsMap() {

@@ -43,6 +43,14 @@ public class AdventureRoomController {
         return this.objectConverter.convert(room, Describable.class);
     }
 
+    @RequestMapping("{roomId}/reload")
+    public void reloadRoom(@PathVariable("roomId") final String roomId) {
+        if (!this.repository.hasRoom(roomId)) {
+            throw new IllegalArgumentException("Room [" + roomId + "] does not exist");
+        }
+        this.repository.reloadRoom(roomId);
+    }
+
     @RequestMapping("{roomId}/adventures")
     public Set<Describable> getRoomAdventures(@PathVariable("roomId") final String roomId) {
         return StreamEx.of(this.repository.getAdventures(roomId))
@@ -54,6 +62,25 @@ public class AdventureRoomController {
     public Describable getRoomAdventure(@PathVariable("roomId") final String roomId, @PathVariable("adventureId") final String adventureId) {
         Adventure adventure = this.repository.getAdventure(roomId, adventureId);
         return this.objectConverter.convert(adventure, Describable.class);
+    }
+
+    @RequestMapping("{roomId}/adventures/{adventureId}/start")
+    public void startRoomAdventure(@PathVariable("roomId") final String roomId, @PathVariable("adventureId") final String adventureId) {
+        Adventure adventure = this.repository.getAdventure(roomId, adventureId);
+        this.adventureService.startAdventure(adventure);
+    }
+
+    @RequestMapping("{roomId}/adventures/{adventureId}/stop")
+    public void stopRoomAdventure(@PathVariable("roomId") final String roomId, @PathVariable("adventureId") final String adventureId) {
+        if (!this.adventureService.hasActiveAdventure()) {
+            throw new IllegalStateException("No active adventure");
+        }
+        Adventure adventure = this.repository.getAdventure(roomId, adventureId);
+        String activeAdventureId = this.adventureService.getActiveAdventure().adventure.id;
+        if (!activeAdventureId.equals(adventure.id)) {
+            throw new IllegalStateException("That adventure is not active, but " + activeAdventureId + " is");
+        }
+        this.adventureService.stopAdventure();
     }
 
     @RequestMapping("{roomId}/adventures/{adventureId}/scripts")
@@ -72,7 +99,7 @@ public class AdventureRoomController {
 
     /**
      * Just run the specified script. This is mainly meant for testing purposes, cause normally you would start
-     * and adventure and the scripts will be ran based on configured triggers.
+     * an adventure and the scripts will be ran based on configured triggers.
      */
     @RequestMapping("{roomId}/adventures/{adventureId}/scripts/{scriptId}/run")
     public void runRoomAdventureScript(@PathVariable("roomId") final String roomId, @PathVariable("adventureId") final String adventureId,
@@ -81,16 +108,5 @@ public class AdventureRoomController {
         Script script = adventure.getScript(scriptId);
         this.adventureService.runScript(adventure, script);
     }
-
-    // @RequestMapping("{id}/start")
-    // public void startAdventure(@PathVariable("id") final String id) {
-    // Adventure adventure = this.adventureRepository.getAdventure(id);
-    // this.adventureService.startAdventure(adventure);
-    // }
-    //
-    // @RequestMapping("stop")
-    // public void stopAdventure() {
-    // this.adventureService.stopAdventure();
-    // }
 
 }

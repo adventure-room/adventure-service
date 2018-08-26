@@ -14,7 +14,6 @@ import com.programyourhome.adventureroom.dsl.util.ReflectionUtil;
 import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.event.AdventureStartedEvent;
 import com.programyourhome.adventureroom.model.event.AdventureStopEvent;
-import com.programyourhome.adventureroom.model.module.AdventureModule;
 import com.programyourhome.adventureroom.model.module.Task;
 import com.programyourhome.adventureroom.model.script.Script;
 import com.programyourhome.adventureroom.model.script.action.Action;
@@ -50,6 +49,10 @@ public class AdventureService {
     }
 
     public synchronized void startAdventure(Adventure adventure) {
+        this.startAdventure(adventure, false);
+    }
+
+    private void startAdventure(Adventure adventure, boolean isolatedTestRun) {
         if (this.hasActiveAdventure()) {
             throw new IllegalStateException("Cannot start a new adventure when one is still active");
         }
@@ -59,11 +62,14 @@ public class AdventureService {
 
         this.eventManager.resetForAdventure(adventure);
         this.startModules(adventure);
-        this.eventManager.fireEvent(new AdventureStartedEvent(adventure.getId()));
+        if (!isolatedTestRun) {
+            this.eventManager.fireEvent(new AdventureStartedEvent(adventure.getId()));
+        }
     }
 
     private void startModules(Adventure adventure) {
         adventure.getModules().forEach(module -> {
+            module.start(adventure);
             module.getConfig().getTasks().forEach((name, task) -> {
                 System.out.println("Starting task [" + name + "] for module [" + module.getConfig().getName() + "]");
                 if (task.isDeamon()) {
@@ -98,7 +104,7 @@ public class AdventureService {
         // TODO: Find better mechanism for stopping script runners.
         this.scriptRunners.forEach(Thread::stop);
         this.scriptRunners.clear();
-        this.activeAdventure.adventure.getModules().forEach(AdventureModule::stop);
+        this.activeAdventure.adventure.getModules().forEach(module -> module.stop(this.activeAdventure.adventure));
         this.activeAdventure = null;
     }
 
@@ -109,6 +115,11 @@ public class AdventureService {
         if (!this.hasActiveAdventure() && !this.scriptRunners.isEmpty()) {
             throw new IllegalStateException("Can only test-run one script at a time in isolation");
         }
+        boolean isolatedTestRun = !this.hasActiveAdventure();
+        if (isolatedTestRun) {
+            this.startAdventure(adventure, isolatedTestRun);
+        }
+
         // TODO: find a nicer solution for this.
         List<Thread> finalThreadList = new ArrayList<>();
         Thread scriptRunner = new Thread(() -> {
@@ -117,6 +128,9 @@ public class AdventureService {
             } finally {
                 // Make sure the script runner is always removed after the script is done.
                 this.scriptRunners.remove(finalThreadList.get(0));
+                if (isolatedTestRun) {
+                    this.stopAdventure();
+                }
             }
         });
         finalThreadList.add(scriptRunner);
@@ -127,14 +141,7 @@ public class AdventureService {
     }
 
     private void runScriptSynchronous(Adventure adventure, Script script) {
-        ExecutionContext executionContext;
-        if (this.hasActiveAdventure()) {
-            executionContext = this.activeAdventure.executionContext;
-        } else {
-            // No adventure is running: run the script in 'isolation' (feature for testing).
-            this.startModules(adventure);
-            executionContext = new ExecutionContext(adventure);
-        }
+        ExecutionContext executionContext = this.activeAdventure.executionContext;
         script.actions.forEach(actionData -> {
             if (actionData.synchronous) {
                 this.executeAction(actionData.action, executionContext);
@@ -144,10 +151,6 @@ public class AdventureService {
                 asyncActionExecutor.start();
             }
         });
-        if (!this.hasActiveAdventure()) {
-            // Stop the isolation run.
-            adventure.getModules().forEach(AdventureModule::stop);
-        }
     }
 
     private <A extends Action> void executeAction(A action, ExecutionContext executionContext) {

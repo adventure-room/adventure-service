@@ -245,19 +245,21 @@ public class AdventureRoomLoader {
     }
 
     // TODO: abstract load character / resource
+    // TODO: consistent naming: folder vs path -> path
+    // TODO: Script required modules should be subset of adventure required modules -> valide and fail otherwise.
 
     private void loadResources(String moduleBasePath, AdventureModule module, Adventure adventure) throws FileNotFoundException {
         File resourcesFolder = new File(moduleBasePath + "resources");
         if (resourcesFolder.exists()) {
-            File[] requiredModuleResourceTypes = resourcesFolder.listFiles(File::isDirectory);
-            for (File requiredModuleResourceType : requiredModuleResourceTypes) {
-                String moduleTypeId = requiredModuleResourceType.getName();
-                if (!module.getConfig().getResourceDescriptorMap().containsKey(moduleTypeId)) {
+            File[] resourcePaths = resourcesFolder.listFiles(File::isDirectory);
+            for (File resourcePath : resourcePaths) {
+                String resourceTypeId = resourcePath.getName();
+                if (!module.getConfig().getResourceDescriptorMap().containsKey(resourceTypeId)) {
                     throw new IllegalStateException(
-                            "Required resource: '" + moduleTypeId + "' not found in module: '" + module.getConfig().getId() + "'");
+                            "Configured resource: '" + resourceTypeId + "' not found in module: '" + module.getConfig().getId() + "'");
                 }
-                ResourceDescriptor<? extends Resource> resourceDescriptor = module.getConfig().getResourceDescriptor(moduleTypeId);
-                for (File resourceDefinition : requiredModuleResourceType.listFiles()) {
+                ResourceDescriptor<? extends Resource> resourceDescriptor = module.getConfig().getResourceDescriptor(resourceTypeId);
+                for (File resourceDefinition : resourcePath.listFiles()) {
                     Class<? extends Resource> resourceClass = resourceDescriptor.clazz;
                     Resource resource;
                     if (ExternalResource.class.isAssignableFrom(resourceClass)) {
@@ -270,7 +272,7 @@ public class AdventureRoomLoader {
                         resource = PropertiesUtil.loadPropertiesIntoFields(new FileInputStream(resourceDefinition),
                                 resourceClass, this.conversionService);
                     }
-                    System.out.println("Resource: " + resource);
+                    System.out.println("Loaded resource: " + resource);
                     adventure.addResource(resource);
                 }
             }
