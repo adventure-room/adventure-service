@@ -9,8 +9,12 @@ import java.util.Set;
 import com.programyourhome.adventureroom.model.character.Character;
 import com.programyourhome.adventureroom.model.event.Event;
 import com.programyourhome.adventureroom.model.module.AdventureModule;
+import com.programyourhome.adventureroom.model.resource.ExternalResource;
 import com.programyourhome.adventureroom.model.resource.Resource;
 import com.programyourhome.adventureroom.model.script.Script;
+
+import one.util.streamex.EntryStream;
+import one.util.streamex.StreamEx;
 
 @SuppressWarnings("unchecked")
 public class Adventure extends AbstractDescribable {
@@ -73,6 +77,22 @@ public class Adventure extends AbstractDescribable {
 
     public <R extends Resource> R getResource(Class<R> clazz, String id) {
         return this.getResourceMap(clazz).get(id);
+    }
+
+    public <O, R extends ExternalResource<O>> Map<String, O> getExternalResourceMap(Class<R> clazz) {
+        return EntryStream.of(this.getResourceMap(clazz))
+                .mapValues(ExternalResource::getWrappedObject)
+                .toMap();
+    }
+
+    public <O, R extends ExternalResource<O>> Collection<O> getExternalResources(Class<R> clazz) {
+        return StreamEx.of(this.getResources(clazz))
+                .map(ExternalResource::getWrappedObject)
+                .toSet();
+    }
+
+    public <O, R extends ExternalResource<O>> O getExternalResource(Class<R> clazz, String id) {
+        return this.getResource(clazz, id).getWrappedObject();
     }
 
     public Map<String, Script> getScriptMap() {

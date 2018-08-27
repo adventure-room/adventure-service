@@ -4,13 +4,19 @@ import java.util.regex.Matcher;
 
 public class MatchResult {
 
+    private final String regexName;
     private final Matcher matcher;
 
-    public MatchResult(Matcher matcher) {
+    public MatchResult(String regexName, Matcher matcher) {
+        this.regexName = regexName;
         if (!matcher.matches()) {
             throw new IllegalArgumentException("The provided matcher must match");
         }
         this.matcher = matcher;
+    }
+
+    public String getRegexName() {
+        return this.regexName;
     }
 
     public String getFullText() {
