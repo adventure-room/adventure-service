@@ -20,6 +20,10 @@ public class ExecutionContext {
         this.variables = new HashMap<>();
     }
 
+    public Adventure getAdventure() {
+        return this.adventure;
+    }
+
     public <R extends Resource> R getResource(Class<R> clazz, String id) {
         return this.adventure.getResource(clazz, id);
     }
