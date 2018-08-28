@@ -13,16 +13,17 @@ public abstract class AbstractRegexDslAdventureModule implements AdventureModule
 
     @Override
     public Optional<Action> parseForAction(String input, Adventure adventure) {
-        // TODO: java-8-yfy
         for (RegexActionConverter<?> converter : this.getRegexActionConverters()) {
-            Pattern pattern = Pattern.compile(converter.getRegexLine());
-            Matcher matcher = pattern.matcher(input);
-            if (matcher.matches()) {
-                try {
-                    return Optional.of(converter.convert(new MatchResult(matcher), adventure));
-                } catch (Exception e) {
-                    // TODO: log warning
-                    e.printStackTrace();
+            for (String regexName : converter.getRegexMap().keySet()) {
+                Pattern pattern = Pattern.compile(converter.getRegexMap().get(regexName));
+                Matcher matcher = pattern.matcher(input);
+                if (matcher.matches()) {
+                    try {
+                        return Optional.of(converter.convert(new MatchResult(regexName, matcher), adventure));
+                    } catch (Exception e) {
+                        // TODO: log warning
+                        e.printStackTrace();
+                    }
                 }
             }
         }

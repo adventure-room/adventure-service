@@ -5,14 +5,14 @@ requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
 
 ---
 
-pete says "Welcome to the adventure" at 1,2
+pete says "Welcome to the adventure" at speakers 1,2
 
-#play background music chill
-dim the lights to 10
+dim all lights to 10
 color light box to blue
-#pete says "Welcome to the adventure"
-#casey says "Thank you!"
 wait 2 seconds
-#turn off the lights
-#stop background music
-dim the lights to 70
+turn off all lights
+wait 2 seconds
+color lights bank,bureau to red
+wait 2 seconds
+dim all lights to 70
+color lights box,bank,bureau to green

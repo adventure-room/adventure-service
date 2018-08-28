@@ -15,6 +15,10 @@ public class MatchResult {
         this.matcher = matcher;
     }
 
+    public boolean is(String regexName) {
+        return this.regexName.equals(regexName);
+    }
+
     public String getRegexName() {
         return this.regexName;
     }

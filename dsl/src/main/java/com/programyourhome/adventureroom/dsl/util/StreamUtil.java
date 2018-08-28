@@ -1,4 +1,4 @@
-package com.programyourhome.adventureroom.server.util;
+package com.programyourhome.adventureroom.dsl.util;
 
 import java.util.Optional;
 
