@@ -7,9 +7,12 @@ requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
 
 #pete says "Welcome to the adventure" at speakers 1,2
 
-dim all lights to 10 in 2 seconds
+dim all lights to 10
+color all lights to white
 wait 2 seconds
-dim all lights to 100 in 4 seconds
+color light box to blue and dim to 100 in 5 seconds &
+color light bank to red and dim to 100 in 5 seconds
+#dim all lights to 100 in 4 seconds
 
 
 #color light box to blue
