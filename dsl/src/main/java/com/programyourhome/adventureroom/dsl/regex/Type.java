@@ -7,7 +7,8 @@ public enum Type {
     INTEGER("[0-9]+"),
     DOUBLE("[0-9]+(\\.[0-9]+)?"),
     NAME("[a-z]+"),
-    TEXT("[^\"]+");
+    TEXT("[^\"]+"),
+    DURATION("[0-9]+ [a-z]+");
 
     private String regex;
 

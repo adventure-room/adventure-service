@@ -1,5 +1,6 @@
 package com.programyourhome.adventureroom.dsl.regex;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 
 public class MatchResult {
@@ -31,8 +32,16 @@ public class MatchResult {
         return this.getValue(regexVariable.name);
     }
 
+    public Optional<String> getOptionalValue(RegexVariable regexVariable) {
+        return Optional.ofNullable(this.getValue(regexVariable));
+    }
+
     public String getValue(String parameterName) {
         return this.matcher.group(parameterName);
+    }
+
+    public Optional<String> getOptionalValue(String parameterName) {
+        return Optional.ofNullable(this.getValue(parameterName));
     }
 
 }
