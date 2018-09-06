@@ -33,7 +33,13 @@ public class MatchResult {
     }
 
     public Optional<String> getOptionalValue(RegexVariable regexVariable) {
-        return Optional.ofNullable(this.getValue(regexVariable));
+        try {
+            return Optional.ofNullable(this.getValue(regexVariable));
+        } catch (IllegalArgumentException e) {
+            // Expected in case the regex variable does not exist, which results in an empty optional.
+            return Optional.empty();
+        }
+
     }
 
     public String getValue(String parameterName) {
