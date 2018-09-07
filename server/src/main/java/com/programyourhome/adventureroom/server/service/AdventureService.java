@@ -14,12 +14,12 @@ import com.programyourhome.adventureroom.dsl.util.ReflectionUtil;
 import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.event.AdventureStartedEvent;
 import com.programyourhome.adventureroom.model.event.AdventureStopEvent;
+import com.programyourhome.adventureroom.model.execution.ExecutionContext;
 import com.programyourhome.adventureroom.model.module.Task;
 import com.programyourhome.adventureroom.model.script.Script;
 import com.programyourhome.adventureroom.model.script.action.Action;
 import com.programyourhome.adventureroom.server.events.EventManager;
 import com.programyourhome.iotadventure.runner.action.executor.ActionExecutor;
-import com.programyourhome.iotadventure.runner.context.ExecutionContext;
 
 @Component
 public class AdventureService {
@@ -61,15 +61,15 @@ public class AdventureService {
         this.activeAdventure.executionContext = new ExecutionContext(adventure);
 
         this.eventManager.resetForAdventure(adventure);
-        this.startModules(adventure);
+        this.startModules(this.activeAdventure);
         if (!isolatedTestRun) {
             this.eventManager.fireEvent(new AdventureStartedEvent(adventure.getId()));
         }
     }
 
-    private void startModules(Adventure adventure) {
-        adventure.getModules().forEach(module -> {
-            module.start(adventure);
+    private void startModules(ActiveAdventure activeAdventure) {
+        activeAdventure.adventure.getModules().forEach(module -> {
+            module.start(activeAdventure.adventure, activeAdventure.executionContext);
             module.getConfig().getTasks().forEach((name, task) -> {
                 System.out.println("Starting task [" + name + "] for module [" + module.getConfig().getName() + "]");
                 if (task.isDeamon()) {
@@ -104,7 +104,7 @@ public class AdventureService {
         // TODO: Find better mechanism for stopping script runners.
         this.scriptRunners.forEach(Thread::stop);
         this.scriptRunners.clear();
-        this.activeAdventure.adventure.getModules().forEach(module -> module.stop(this.activeAdventure.adventure));
+        this.activeAdventure.adventure.getModules().forEach(module -> module.stop(this.activeAdventure.adventure, this.activeAdventure.executionContext));
         this.activeAdventure = null;
     }
 

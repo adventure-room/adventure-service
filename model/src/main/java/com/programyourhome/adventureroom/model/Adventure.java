@@ -12,6 +12,7 @@ import com.programyourhome.adventureroom.model.module.AdventureModule;
 import com.programyourhome.adventureroom.model.resource.ExternalResource;
 import com.programyourhome.adventureroom.model.resource.Resource;
 import com.programyourhome.adventureroom.model.script.Script;
+import com.programyourhome.adventureroom.model.toolbox.Toolbox;
 
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
@@ -20,6 +21,7 @@ import one.util.streamex.StreamEx;
 public class Adventure extends AbstractDescribable {
 
     private Set<String> requiredModules;
+    private Toolbox toolbox;
 
     private final Map<String, AdventureModule> modules;
     private final Map<String, Character> characters;
@@ -37,6 +39,14 @@ public class Adventure extends AbstractDescribable {
 
     public Set<String> getRequiredModules() {
         return this.requiredModules;
+    }
+
+    public Toolbox getToolbox() {
+        return this.toolbox;
+    }
+
+    public void setToolbox(Toolbox toolbox) {
+        this.toolbox = toolbox;
     }
 
     public Map<String, AdventureModule> getModuleMap() {

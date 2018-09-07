@@ -47,6 +47,7 @@ import com.programyourhome.adventureroom.model.toolbox.CacheService;
 import com.programyourhome.adventureroom.model.toolbox.DataStreamToUrl;
 import com.programyourhome.adventureroom.model.toolbox.Toolbox;
 import com.programyourhome.adventureroom.model.toolbox.ToolboxImpl;
+import com.programyourhome.adventureroom.server.toolbox.AdventureRoomConversionService;
 import com.programyourhome.adventureroom.server.util.FileUtil;
 import com.programyourhome.adventureroom.server.util.PropertiesUtil;
 import com.programyourhome.immerse.toolbox.util.StreamUtil;
@@ -84,7 +85,8 @@ public class AdventureRoomLoader {
     @PostConstruct
     public void init() {
         // Create a toolbox that gives access to the different services of the server.
-        this.toolbox = new ToolboxImpl(this.cacheService, this.dataStreamToUrl);
+        AdventureRoomConversionService adventureRoomConversionService = new AdventureRoomConversionService(this.conversionService);
+        this.toolbox = new ToolboxImpl(this.cacheService, this.dataStreamToUrl, adventureRoomConversionService);
     }
 
     private AdventureModule createNewModule(String moduleId) {
@@ -153,6 +155,7 @@ public class AdventureRoomLoader {
     private Adventure loadAdventure(File adventurePath) {
         try {
             Adventure adventure = this.loadAdventureBase(adventurePath);
+            adventure.setToolbox(this.toolbox);
 
             Map<String, EventDescriptor<? extends Event>> availableEvents = new HashMap<>();
             this.loadBaseAvailableEvents(availableEvents);

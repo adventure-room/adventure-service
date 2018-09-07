@@ -6,4 +6,6 @@ public interface Toolbox {
 
     public DataStreamToUrl getDataStreamToUrl();
 
+    public ConversionService getConversionService();
+
 }

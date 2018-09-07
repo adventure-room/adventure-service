@@ -1,10 +1,12 @@
 package com.programyourhome.adventureroom.model.module;
 
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
 import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.event.Event;
+import com.programyourhome.adventureroom.model.execution.ExecutionContext;
 import com.programyourhome.adventureroom.model.script.action.Action;
 import com.programyourhome.adventureroom.model.toolbox.Toolbox;
 
@@ -22,17 +24,21 @@ public interface AdventureModule {
         // Default no-op.
     }
 
-    public void start(Adventure adventure);
+    public void start(Adventure adventure, ExecutionContext context);
 
-    public void stop(Adventure adventure);
+    public void stop(Adventure adventure, ExecutionContext context);
 
-    @SuppressWarnings("unchecked")
-    public default <Api, Impl extends Api> Impl loadImpl(Class<Api> apiInterface) {
+    public default <Api> Api loadApiImpl(Class<Api> apiInterface) {
         ServiceLoader<Api> apiLoader = ServiceLoader.load(apiInterface);
-        if (!apiLoader.iterator().hasNext()) {
+        Iterator<Api> iter = apiLoader.iterator();
+        if (!iter.hasNext()) {
             throw new IllegalStateException("No implementation found for api: " + apiInterface);
         }
-        return (Impl) apiLoader.iterator().next();
+        Api impl = apiLoader.iterator().next();
+        if (iter.hasNext()) {
+            throw new IllegalStateException("More than one implementation found for api: " + apiInterface);
+        }
+        return impl;
     }
 
 }

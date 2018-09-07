@@ -16,6 +16,8 @@ public interface RegexActionConverter<A extends Action> {
     public static final RegexVariable INTEGER = new RegexVariable("integer", Type.INTEGER);
     public static final RegexVariable DOUBLE = new RegexVariable("double", Type.DOUBLE);
     public static final RegexVariable NAME = new RegexVariable("name", Type.NAME);
+    public static final RegexVariable NAME_WITH_DASHES = new RegexVariable("propertyName", Type.NAME_WITH_DASHES);
+    public static final RegexVariable WORD = new RegexVariable("word", Type.WORD);
     public static final RegexVariable TEXT = new RegexVariable("text", Type.TEXT);
     public static final RegexVariable DURATION = new RegexVariable("duration", Type.DURATION);
 

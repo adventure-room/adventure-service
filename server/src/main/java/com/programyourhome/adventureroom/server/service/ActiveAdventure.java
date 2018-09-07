@@ -1,7 +1,7 @@
 package com.programyourhome.adventureroom.server.service;
 
 import com.programyourhome.adventureroom.model.Adventure;
-import com.programyourhome.iotadventure.runner.context.ExecutionContext;
+import com.programyourhome.adventureroom.model.execution.ExecutionContext;
 
 public class ActiveAdventure {
 
