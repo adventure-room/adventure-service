@@ -5,7 +5,7 @@ requiredModules = common, philipshue, amazonpolly, immerse
 
 ---
 
-play background music chill
+play background music chill.wav
 dim all lights to 10
 color light testlight1 to purple
 pete says "Welcome to the adventure"

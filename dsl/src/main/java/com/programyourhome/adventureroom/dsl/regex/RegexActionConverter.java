@@ -19,6 +19,7 @@ public interface RegexActionConverter<A extends Action> {
     public static final RegexVariable NAME_WITH_DASHES = new RegexVariable("propertyName", Type.NAME_WITH_DASHES);
     public static final RegexVariable WORD = new RegexVariable("word", Type.WORD);
     public static final RegexVariable TEXT = new RegexVariable("text", Type.TEXT);
+    public static final RegexVariable FILENAME = new RegexVariable("filename", Type.FILENAME);
     public static final RegexVariable DURATION = new RegexVariable("duration", Type.DURATION);
 
     // Some often used regex names

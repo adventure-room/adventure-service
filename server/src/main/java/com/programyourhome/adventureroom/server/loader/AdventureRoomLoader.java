@@ -44,6 +44,7 @@ import com.programyourhome.adventureroom.model.script.Script;
 import com.programyourhome.adventureroom.model.script.action.Action;
 import com.programyourhome.adventureroom.model.script.action.ActionData;
 import com.programyourhome.adventureroom.model.toolbox.CacheService;
+import com.programyourhome.adventureroom.model.toolbox.ContentService;
 import com.programyourhome.adventureroom.model.toolbox.DataStreamToUrl;
 import com.programyourhome.adventureroom.model.toolbox.Toolbox;
 import com.programyourhome.adventureroom.model.toolbox.ToolboxImpl;
@@ -69,6 +70,9 @@ public class AdventureRoomLoader {
     private GenericConversionService conversionService;
 
     @Inject
+    private ContentService contentService;
+
+    @Inject
     private CacheService cacheService;
 
     @Inject
@@ -86,7 +90,7 @@ public class AdventureRoomLoader {
     public void init() {
         // Create a toolbox that gives access to the different services of the server.
         AdventureRoomConversionService adventureRoomConversionService = new AdventureRoomConversionService(this.conversionService);
-        this.toolbox = new ToolboxImpl(this.cacheService, this.dataStreamToUrl, adventureRoomConversionService);
+        this.toolbox = new ToolboxImpl(this.contentService, this.cacheService, this.dataStreamToUrl, adventureRoomConversionService);
     }
 
     private AdventureModule createNewModule(String moduleId) {

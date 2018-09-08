@@ -9,6 +9,7 @@ public enum Type {
     NAME("[a-z]+"),
     NAME_WITH_DASHES("[a-z\\-]+"),
     WORD("[^ ]+"),
+    FILENAME("[A-Za-z\\.]+"),
     TEXT("[^\"]+"),
     DURATION("[0-9]+ [a-z]+");
 

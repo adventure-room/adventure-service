@@ -44,7 +44,11 @@ public class DataStreamToUrlController implements DataStreamToUrl {
         InputStreamResource inputStreamResource = new InputStreamResource(dataStream.getInputStream());
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", dataStream.getContentType());
-        headers.setContentLength(dataStream.getLength());
+        if (dataStream.isLengthKnown()) {
+            headers.setContentLength(dataStream.getLength());
+        }
+        // Remove from map, because each stream can only be served once.
+        this.dataStreams.remove(id);
         return new ResponseEntity<InputStreamResource>(inputStreamResource, headers, HttpStatus.OK);
     }
 
