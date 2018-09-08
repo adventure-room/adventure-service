@@ -6,25 +6,21 @@ requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
 ---
 
 pete says "Welcome to the adventure" at speakers 1,2
+play clapping.wav at speaker 1 at volume 0.4
+#play clapping.wav at location 50,0,0
 
-wait 1 seconds
-
-play background music chill.wav
-
-wait 2 seconds
-
-pete says "Someone talks during background music" at speakers 1,2 &
-color light bureau to white and dim to 0
-color light bureau to red and dim to 100 in 5 seconds
-
-wait 2 seconds
-
-stop background music
-turn off light bureau
-
-wait 2 seconds
-
-pete says "This is the end of the adventure" at speakers 1,2
+#pete says "Welcome to the adventure" at speakers 1,2
+#wait 1 seconds
+#play background music chill.wav
+#wait 2 seconds
+#pete says "Someone talks during background music" at speakers 1,2 &
+#color light bureau to white and dim to 0
+#color light bureau to red and dim to 100 in 5 seconds
+#wait 2 seconds
+#stop background music
+#turn off light bureau
+#wait 2 seconds
+#pete says "This is the end of the adventure" at speakers 1,2
 
 #dim light bureau to 10
 #wait 1 seconds

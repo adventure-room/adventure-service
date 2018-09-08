@@ -21,6 +21,7 @@ public interface RegexActionConverter<A extends Action> {
     public static final RegexVariable TEXT = new RegexVariable("text", Type.TEXT);
     public static final RegexVariable FILENAME = new RegexVariable("filename", Type.FILENAME);
     public static final RegexVariable DURATION = new RegexVariable("duration", Type.DURATION);
+    public static final RegexVariable LOCATION = new RegexVariable("location", Type.LOCATION);
 
     // Some often used regex names
     public static final String SINGLE = "single";
