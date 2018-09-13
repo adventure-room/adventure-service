@@ -28,26 +28,33 @@ public class MatchResult {
         return this.matcher.group(0);
     }
 
-    public String getValue(RegexVariable regexVariable) {
-        return this.getValue(regexVariable.name);
+    public boolean hasValue(RegexVariable regexVariable) {
+        return this.hasValue(regexVariable.name);
     }
 
-    public Optional<String> getOptionalValue(RegexVariable regexVariable) {
-        try {
-            return Optional.ofNullable(this.getValue(regexVariable));
-        } catch (IllegalArgumentException e) {
-            // Expected in case the regex variable does not exist, which results in an empty optional.
-            return Optional.empty();
-        }
+    public boolean hasValue(String regexVariableName) {
+        return this.getOptionalValue(regexVariableName).isPresent();
+    }
 
+    public String getValue(RegexVariable regexVariable) {
+        return this.getValue(regexVariable.name);
     }
 
     public String getValue(String parameterName) {
         return this.matcher.group(parameterName);
     }
 
+    public Optional<String> getOptionalValue(RegexVariable regexVariable) {
+        return this.getOptionalValue(regexVariable.name);
+    }
+
     public Optional<String> getOptionalValue(String parameterName) {
-        return Optional.ofNullable(this.getValue(parameterName));
+        try {
+            return Optional.ofNullable(this.getValue(parameterName));
+        } catch (IllegalArgumentException e) {
+            // Expected in case the regex variable does not exist, which results in an empty optional.
+            return Optional.empty();
+        }
     }
 
 }

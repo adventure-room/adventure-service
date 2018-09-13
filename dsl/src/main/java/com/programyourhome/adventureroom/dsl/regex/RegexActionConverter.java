@@ -5,6 +5,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.script.action.Action;
 
@@ -22,6 +24,7 @@ public interface RegexActionConverter<A extends Action> {
     public static final RegexVariable FILENAME = new RegexVariable("filename", Type.FILENAME);
     public static final RegexVariable DURATION = new RegexVariable("duration", Type.DURATION);
     public static final RegexVariable LOCATION = new RegexVariable("location", Type.LOCATION);
+    public static final RegexVariable LOCATION_PATH = new RegexVariable("locationPath", Type.LOCATION_PATH);
 
     // Some often used regex names
     public static final String SINGLE = "single";
@@ -44,8 +47,16 @@ public interface RegexActionConverter<A extends Action> {
         return regexMap;
     }
 
+    public default String either(String... regexes) {
+        return "(" + StringUtils.join(regexes, '|') + ")";
+    }
+
     public default String optional(String regex) {
         return "(" + regex + ")?";
+    }
+
+    public default String asVariable(String name, String regex) {
+        return new RegexVariable(name, regex).toString();
     }
 
     public default Duration parseDuration(String durationMatch) {

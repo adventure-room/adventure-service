@@ -6,7 +6,7 @@ requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
 ---
 
 pete says "Welcome to the adventure" at speakers 1,2
-play clapping.wav at speaker 1 at volume 0.4
+play clapping.wav at speaker 1 at volume 40
 #play clapping.wav at location 50,0,0
 
 #pete says "Welcome to the adventure" at speakers 1,2
