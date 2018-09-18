@@ -13,14 +13,14 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.TokenStream;
 
-import com.programyourhome.adventureroom.dsl.util.ReflectionUtil;
 import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.module.AdventureModule;
 import com.programyourhome.adventureroom.model.script.action.Action;
+import com.programyourhome.adventureroom.model.util.ReflectionUtil;
 
 public abstract class AbstractAntlrDslAdventureModule implements AdventureModule {
 
-    public static final String ADVENTURE_ROOM_PACKAGE_NAME = "com.programyourhome.adventureroom";
+    public static final String ADVENTURE_ROOM_MODULE_PACKAGE_NAME = "com.programyourhome.adventureroom.module";
     public static final String DSL_PACKAGE_NAME = "dsl";
     public static final String CONVERTERS_PACKAGE_NAME = "converters";
     public static final String PARSER_RULE_NAME = "action";
@@ -34,7 +34,7 @@ public abstract class AbstractAntlrDslAdventureModule implements AdventureModule
     }
 
     protected String getAntlrPackageName() {
-        return ADVENTURE_ROOM_PACKAGE_NAME + "." + this.dslIdLowerCase + "." + DSL_PACKAGE_NAME;
+        return ADVENTURE_ROOM_MODULE_PACKAGE_NAME + "." + this.dslIdLowerCase + "." + DSL_PACKAGE_NAME;
     }
 
     protected String getLexerClassName() {
@@ -67,8 +67,8 @@ public abstract class AbstractAntlrDslAdventureModule implements AdventureModule
 
     protected AntlrActionConverter<ParserRuleContext, Action> getActionConverter(ParserRuleContext context) {
         String childContextClassSimpleName = context.getClass().getSimpleName();
-        String actionConverterClassName = ADVENTURE_ROOM_PACKAGE_NAME + "." + this.dslIdLowerCase + "."
-                + DSL_PACKAGE_NAME + "." + CONVERTERS_PACKAGE_NAME + "." + childContextClassSimpleName.replace("Context", "Converter");
+        String actionConverterClassName = this.getAntlrPackageName() + "." + CONVERTERS_PACKAGE_NAME
+                + "." + childContextClassSimpleName.replace("Context", "Converter");
         Class<? extends AntlrActionConverter<ParserRuleContext, Action>> actionConverterClass = ReflectionUtil
                 .classForNameNoCheckedException(actionConverterClassName);
         return ReflectionUtil.callConstructorNoCheckedException(actionConverterClass);

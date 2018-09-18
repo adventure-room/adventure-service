@@ -23,10 +23,10 @@ import org.springframework.stereotype.Controller;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.programyourhome.adventureroom.dsl.util.ReflectionUtil;
 import com.programyourhome.adventureroom.model.toolbox.CacheResource;
 import com.programyourhome.adventureroom.model.toolbox.CacheService;
 import com.programyourhome.adventureroom.model.toolbox.DataStream;
+import com.programyourhome.adventureroom.model.util.ReflectionUtil;
 
 @Controller
 public class CacheServiceImpl implements CacheService {

@@ -25,8 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.stereotype.Component;
 
-import com.programyourhome.adventureroom.dsl.util.ReflectionUtil;
-import com.programyourhome.adventureroom.dsl.util.StreamUtil;
 import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.Room;
 import com.programyourhome.adventureroom.model.character.Character;
@@ -49,6 +47,8 @@ import com.programyourhome.adventureroom.model.toolbox.ContentService;
 import com.programyourhome.adventureroom.model.toolbox.DataStreamToUrl;
 import com.programyourhome.adventureroom.model.toolbox.Toolbox;
 import com.programyourhome.adventureroom.model.toolbox.ToolboxImpl;
+import com.programyourhome.adventureroom.model.util.ReflectionUtil;
+import com.programyourhome.adventureroom.model.util.StreamUtil;
 import com.programyourhome.adventureroom.server.toolbox.AdventureRoomConversionService;
 import com.programyourhome.adventureroom.server.util.FileUtil;
 import com.programyourhome.adventureroom.server.util.PropertiesUtil;

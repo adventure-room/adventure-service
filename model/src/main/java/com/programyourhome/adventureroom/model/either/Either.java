@@ -6,17 +6,21 @@ import com.programyourhome.adventureroom.model.util.StreamUtil;
 
 import one.util.streamex.StreamEx;
 
-public class EitherOrNone {
+public class Either {
 
     private final Optional<?>[] optionals;
 
-    public EitherOrNone(Optional<?>... optionals) {
+    public Either(Optional<?>... optionals) {
         this.optionals = optionals;
-        this.assertZeroOrOne();
+        this.assertOneAndJustOne();
     }
 
     public Optional<?>[] getOptionals() {
         return this.optionals;
+    }
+
+    public int getNumberOfOptionals() {
+        return this.optionals.length;
     }
 
     @SuppressWarnings("unchecked")
@@ -24,23 +28,15 @@ public class EitherOrNone {
         return (Optional<T>) this.optionals[oneBasedIndex - 1];
     }
 
-    public Optional<Yes> isEmpty() {
-        if (this.getOptionalSize() == 0) {
-            return Optional.of(Yes.Y);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    public long getOptionalSize() {
+    public long getNumberOfNonEmptyOptionals() {
         return StreamEx.of(this.optionals)
                 .flatMap(StreamUtil::optionalToStream)
                 .count();
     }
 
-    private void assertZeroOrOne() {
-        if (this.getOptionalSize() > 1) {
-            throw new IllegalArgumentException("Either or none should have zero or one value in it's optionals, not " + this.getOptionalSize());
+    private void assertOneAndJustOne() {
+        if (this.getNumberOfNonEmptyOptionals() > 1) {
+            throw new IllegalArgumentException("Either should have one and just one value in it's optionals, not " + this.getNumberOfNonEmptyOptionals());
         }
     }
 

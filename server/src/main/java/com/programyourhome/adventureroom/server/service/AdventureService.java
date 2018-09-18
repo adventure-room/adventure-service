@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import com.programyourhome.adventureroom.dsl.util.ReflectionUtil;
 import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.event.AdventureStartedEvent;
 import com.programyourhome.adventureroom.model.event.AdventureStopEvent;
@@ -18,6 +17,7 @@ import com.programyourhome.adventureroom.model.execution.ExecutionContext;
 import com.programyourhome.adventureroom.model.module.Task;
 import com.programyourhome.adventureroom.model.script.Script;
 import com.programyourhome.adventureroom.model.script.action.Action;
+import com.programyourhome.adventureroom.model.util.ReflectionUtil;
 import com.programyourhome.adventureroom.server.events.EventManager;
 import com.programyourhome.iotadventure.runner.action.executor.ActionExecutor;
 

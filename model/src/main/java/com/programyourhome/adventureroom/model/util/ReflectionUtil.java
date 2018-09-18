@@ -8,12 +8,11 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import one.util.streamex.StreamEx;
 
@@ -98,12 +97,10 @@ public class ReflectionUtil {
                 throw new IllegalStateException("Typed class [" + typedClass + "] should contain exactly one type parameter");
             }
         }
-        Set<Type> superTypes = new HashSet<>();
-        populateSuperTypes(baseClass, superTypes);
+        Set<ParameterizedType> genericSuperTypes = new HashSet<>();
+        populateGenericSuperTypes(baseClass, genericSuperTypes);
 
-        return StreamEx.of(superTypes)
-                .filter(type -> type instanceof ParameterizedType)
-                .map(type -> (ParameterizedType) type)
+        return StreamEx.of(genericSuperTypes)
                 .filter(type -> typedClasses.contains(type.getRawType()))
                 .filter(type -> type.getActualTypeArguments()[0] instanceof Class)
                 .map(type -> (Class<?>) type.getActualTypeArguments()[0])
@@ -111,21 +108,38 @@ public class ReflectionUtil {
                         + "or type parameter is not instantiated"));
     }
 
-    @SuppressWarnings("rawtypes")
-    private static void populateSuperTypes(Class<?> baseClass, Set<Type> superTypes) {
-        Consumer<Type> addSuperType = superType -> {
-            superTypes.add(superType);
-            if (superType instanceof Class) {
-                populateSuperTypes((Class) superType, superTypes);
-            }
-        };
+    public static Class<?> getGenericParameterWithSuperClass(Class<?> baseClass, Class<?> superClassToSearch) {
+        Set<ParameterizedType> genericSuperTypes = new HashSet<>();
+        populateGenericSuperTypes(baseClass, genericSuperTypes);
+        return StreamEx.of(genericSuperTypes)
+                .flatMap(type -> StreamEx.of(type.getActualTypeArguments()))
+                .filter(type -> type instanceof Class)
+                .map(type -> (Class<?>) type)
+                .filter(superClassToSearch::isAssignableFrom)
+                .findFirst().orElseThrow(() -> new IllegalStateException("No actual type parameter found in hierarchy of [" + baseClass + "] "
+                        + "with super class [" + superClassToSearch + "]"));
+    }
 
-        Type objectSuperType = baseClass.getGenericSuperclass();
-        if (objectSuperType != null) {
-            addSuperType.accept(objectSuperType);
+    private static void populateGenericSuperTypes(Class<?> baseClass, Set<ParameterizedType> genericSuperTypes) {
+        // Whether or not to continue upwards in the tree.
+        Function<Type, Boolean> include = type -> type != null && type instanceof ParameterizedType;
+        // Check the super class of the base class.
+        Type genericSuperClass = baseClass.getGenericSuperclass();
+        if (include.apply(genericSuperClass)) {
+            genericSuperTypes.add((ParameterizedType) genericSuperClass);
         }
-        List<Type> interfaceSuperTypes = Arrays.asList(baseClass.getGenericInterfaces());
-        interfaceSuperTypes.forEach(addSuperType::accept);
+        if (baseClass.getSuperclass() != null) {
+            populateGenericSuperTypes(baseClass.getSuperclass(), genericSuperTypes);
+        }
+        // Check all implemented interfaces of the base class.
+        for (Type genericSuperInterface : baseClass.getGenericInterfaces()) {
+            if (include.apply(genericSuperInterface)) {
+                genericSuperTypes.add((ParameterizedType) genericSuperInterface);
+            }
+        }
+        for (Class<?> superInterface : baseClass.getInterfaces()) {
+            populateGenericSuperTypes(superInterface, genericSuperTypes);
+        }
     }
 
 }
