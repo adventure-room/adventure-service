@@ -2,6 +2,7 @@ package com.programyourhome.adventureroom.model.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -72,6 +73,36 @@ public class ReflectionUtil {
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
             throw new IllegalStateException("Exception during calling constructor", e);
         }
+    }
+
+    public static boolean hasMethod(Object object, String methodName) {
+        return hasMethod(object.getClass(), methodName);
+    }
+
+    public static boolean hasMethod(Class<?> clazz, String methodName) {
+        return getMethod(clazz, methodName) != null;
+    }
+
+    public static void callVoidMethodNoCheckedException(Object object, String methodName, Object... arguments) {
+        try {
+            Method method = getMethod(object.getClass(), methodName);
+            method.setAccessible(true);
+            method.invoke(object, arguments);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
+            throw new IllegalStateException("Exception during calling method", e);
+        }
+    }
+
+    // Get the first method with the specified name.
+    private static Method getMethod(Class<?> clazz, String methodName) {
+        Method method = null;
+        for (Method aMethod : clazz.getDeclaredMethods()) {
+            if (aMethod.getName().equals(methodName)) {
+                method = aMethod;
+                break;
+            }
+        }
+        return method;
     }
 
     private static boolean isMatch(Constructor<?> constructor, Set<String> propertyNames) {
