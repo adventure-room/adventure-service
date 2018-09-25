@@ -2,7 +2,6 @@ package com.programyourhome.adventureroom.dsl.antlr;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -20,12 +19,8 @@ public abstract class AbstractReflectiveParseTreeAntlrActionConverter<C extends 
             String ruleName = context.getClass().getSimpleName().replace("Context", "");
             String methodName = "parse" + ruleName;
             if (ReflectionUtil.hasMethod(this, methodName)) {
-                this.registerRuleConverter(context.getClass(), new BiConsumer<ParserRuleContext, A>() {
-                    @Override
-                    public void accept(ParserRuleContext ruleContext, A action) {
-                        ReflectionUtil.callVoidMethodNoCheckedException(this, methodName, ruleContext, action);
-                    }
-                });
+                this.registerRuleConverter(context.getClass(), (ParserRuleContext ruleContext, A action) -> ReflectionUtil
+                        .callVoidMethodNoCheckedException(AbstractReflectiveParseTreeAntlrActionConverter.this, methodName, ruleContext, action));
             }
         }
     }
