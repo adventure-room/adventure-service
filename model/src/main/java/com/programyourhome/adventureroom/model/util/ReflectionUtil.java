@@ -3,6 +3,7 @@ package com.programyourhome.adventureroom.model.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -73,6 +74,10 @@ public class ReflectionUtil {
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
             throw new IllegalStateException("Exception during calling constructor", e);
         }
+    }
+
+    public static boolean hasPublicMethod(Object object, String methodName) {
+        return hasMethod(object.getClass(), methodName) && Modifier.isPublic(getMethod(object.getClass(), methodName).getModifiers());
     }
 
     public static boolean hasMethod(Object object, String methodName) {

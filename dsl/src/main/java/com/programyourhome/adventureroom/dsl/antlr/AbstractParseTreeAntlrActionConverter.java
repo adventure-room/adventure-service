@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.script.action.Action;
@@ -61,6 +62,7 @@ public abstract class AbstractParseTreeAntlrActionConverter<C extends ParserRule
                 ((BiConsumer<ParserRuleContext, A>) consumer).accept(rueContext, action);
             }
         }
+        System.out.println(ReflectionToStringBuilder.toString(action));
         return action;
     }
 

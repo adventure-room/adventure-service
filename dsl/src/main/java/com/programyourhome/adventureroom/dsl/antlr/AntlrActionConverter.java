@@ -17,7 +17,7 @@ public interface AntlrActionConverter<C extends ParserRuleContext, A extends Act
     }
 
     public default Optional<String> toOptionalString(Token token) {
-        return Optional.of(toString(token));
+        return Optional.ofNullable(token).map(this::toString);
     }
 
     public default int toInt(Token token) {
@@ -25,7 +25,7 @@ public interface AntlrActionConverter<C extends ParserRuleContext, A extends Act
     }
 
     public default Optional<Integer> toOptionalInt(Token token) {
-        return Optional.of(toInt(token));
+        return Optional.ofNullable(token).map(this::toInt);
     }
 
     public default double toDouble(Token token) {
@@ -33,7 +33,7 @@ public interface AntlrActionConverter<C extends ParserRuleContext, A extends Act
     }
 
     public default Optional<Double> toOptionalDouble(Token token) {
-        return Optional.of(toDouble(token));
+        return Optional.ofNullable(token).map(this::toDouble);
     }
 
 }

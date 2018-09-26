@@ -18,7 +18,7 @@ public abstract class AbstractReflectiveParseTreeAntlrActionConverter<C extends 
         for (ParserRuleContext context : parseRuleContextList) {
             String ruleName = context.getClass().getSimpleName().replace("Context", "");
             String methodName = "parse" + ruleName;
-            if (ReflectionUtil.hasMethod(this, methodName)) {
+            if (ReflectionUtil.hasPublicMethod(this, methodName)) {
                 this.registerRuleConverter(context.getClass(), (ParserRuleContext ruleContext, A action) -> ReflectionUtil
                         .callVoidMethodNoCheckedException(AbstractReflectiveParseTreeAntlrActionConverter.this, methodName, ruleContext, action));
             }
