@@ -16,10 +16,15 @@ import com.programyourhome.adventureroom.model.util.ReflectionUtil;
 @SuppressWarnings("unchecked")
 public abstract class AbstractParseTreeAntlrActionConverter<C extends ParserRuleContext, A extends Action> implements AntlrActionConverter<C, A> {
 
+    private Adventure adventure;
     private final Map<Class<? extends ParserRuleContext>, BiConsumer<? extends ParserRuleContext, A>> ruleConsumers;
 
     public AbstractParseTreeAntlrActionConverter() {
         this.ruleConsumers = new HashMap<>();
+    }
+
+    public Adventure getAdventure() {
+        return this.adventure;
     }
 
     protected void registerRuleConverter(Class<? extends ParserRuleContext> parserRuleContextClass, BiConsumer<ParserRuleContext, A> consumer) {
@@ -38,6 +43,7 @@ public abstract class AbstractParseTreeAntlrActionConverter<C extends ParserRule
      */
     @Override
     public A convert(C context, Adventure adventure) {
+        this.adventure = adventure;
         // Let the subclass register it's rule converters.
         this.registerRuleConverters(context);
 

@@ -5,6 +5,8 @@ requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
 
 ---
 
+play clapping.wav at location 1,2,3
+
 play background music spiral.wav
 pete says "Welcome to the adventure" at speakers 1,2
 wait 2 seconds
