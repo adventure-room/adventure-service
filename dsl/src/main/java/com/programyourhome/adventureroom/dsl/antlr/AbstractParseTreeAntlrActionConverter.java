@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -13,6 +15,9 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import com.programyourhome.adventureroom.model.Adventure;
 import com.programyourhome.adventureroom.model.script.action.Action;
 import com.programyourhome.adventureroom.model.util.ReflectionUtil;
+import com.programyourhome.adventureroom.model.util.StreamUtil;
+
+import one.util.streamex.StreamEx;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractParseTreeAntlrActionConverter<C extends ParserRuleContext, A extends Action> implements AntlrActionConverter<C, A> {
@@ -77,6 +82,27 @@ public abstract class AbstractParseTreeAntlrActionConverter<C extends ParserRule
             ParseTree child = parent.getChild(i);
             this.treeToList(child, parseTreeList);
         }
+    }
+
+    @SafeVarargs
+    protected final <T> Optional<T> getOneAsOptional(Optional<T>... optionals) {
+        return Optional.of(this.getOne(optionals));
+    }
+
+    @SafeVarargs
+    protected final <T> T getOne(Optional<T>... optionals) {
+        return this.maybeOne(optionals).get();
+    }
+
+    @SafeVarargs
+    protected final <T> Optional<T> maybeOne(Optional<T>... optionals) {
+        return StreamEx.of(optionals)
+                .flatMap(StreamUtil::optionalToStream)
+                .findFirst();
+    }
+
+    protected <O, T> Optional<T> parse(O object, Function<O, T> parser) {
+        return Optional.ofNullable(object).map(parser);
     }
 
 }
