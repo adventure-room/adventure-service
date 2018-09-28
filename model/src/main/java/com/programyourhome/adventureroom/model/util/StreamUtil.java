@@ -20,4 +20,21 @@ public class StreamUtil {
         return optional.isPresent() ? StreamEx.of(optional.get()) : StreamEx.empty();
     }
 
+    @SafeVarargs
+    public static final <T> Optional<T> getOneAsOptional(Optional<T>... optionals) {
+        return Optional.of(getOne(optionals));
+    }
+
+    @SafeVarargs
+    public static final <T> T getOne(Optional<T>... optionals) {
+        return maybeOne(optionals).get();
+    }
+
+    @SafeVarargs
+    public static final <T> Optional<T> maybeOne(Optional<T>... optionals) {
+        return StreamEx.of(optionals)
+                .flatMap(StreamUtil::optionalToStream)
+                .findFirst();
+    }
+
 }

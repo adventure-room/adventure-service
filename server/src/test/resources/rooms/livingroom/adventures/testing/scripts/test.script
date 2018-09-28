@@ -5,7 +5,10 @@ requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
 
 ---
 
-play clapping.wav at volume 10 moving on path (1,2,3);(4,5,6) with speed 10.0 with listener circling around (5,4,3) with radius 10.0 with speed 15.0 as all speakers for 10 seconds
+play clapping.wav at volume 50 moving on path (0,0,0);(40,0,0) with speed 10.0 with listener at location (20,50,0) repeat 3 times
+
+#play clapping.wav at volume 50 moving on path (0,0,0);(0,10,0) with speed 2.0 with listener circling around (0,0,0) with radius 10.0 with speed 15.0 as all speakers for 10 seconds
+
 
 #play background music spiral.wav
 #pete says "Welcome to the adventure" at speakers 1,2
