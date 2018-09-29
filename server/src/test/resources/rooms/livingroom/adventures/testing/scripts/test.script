@@ -5,7 +5,11 @@ requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
 
 ---
 
-pete says "Hello this is a test message that will be moving from speaker 1 to speaker 2" moving on path (0,0,0);(40,0,0) with speed 10.0 with listener at location (20,50,0)
+play clapping at speakers 1
+
+play background music lala
+
+#pete says "Hello this is a test message that will be moving from speaker 1 to speaker 2" moving on path (0,0,0);(40,0,0) with speed 10 with listener at location (20,50,0)
 
 #play clapping.wav at volume 50 moving on path (0,0,0);(40,0,0) with speed 10.0 with listener at location (20,50,0) repeat 3 times
 
