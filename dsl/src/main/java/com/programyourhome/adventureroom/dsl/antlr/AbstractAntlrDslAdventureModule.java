@@ -102,6 +102,7 @@ public abstract class AbstractAntlrDslAdventureModule implements AdventureModule
             ParserRuleContext context = (ParserRuleContext) parseMethod.invoke(parser);
             if (context.exception != null) {
                 // TODO: config antlr to throw this
+                // TODO: or just return Optional.empty() here?
                 throw context.exception;
             }
             return Optional.of(this.convertAction(context, adventure));

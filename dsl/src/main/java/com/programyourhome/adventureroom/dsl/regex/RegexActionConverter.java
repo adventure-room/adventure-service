@@ -25,6 +25,7 @@ public interface RegexActionConverter<A extends Action> {
     public static final RegexVariable DURATION = new RegexVariable("duration", Type.DURATION);
     public static final RegexVariable LOCATION = new RegexVariable("location", Type.LOCATION);
     public static final RegexVariable LOCATION_PATH = new RegexVariable("locationPath", Type.LOCATION_PATH);
+    public static final RegexVariable REST_OF_THE_LINE = new RegexVariable("rest", Type.EVERYTHING);
 
     // Some often used regex names
     public static final String SINGLE = "single";

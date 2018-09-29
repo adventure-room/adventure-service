@@ -5,11 +5,11 @@ requiredModules = common, philipshue, amazonpolly, immerse
 
 ---
 
-play background music chill.wav
-dim all lights to 10
-color light testlight1 to purple
-pete says "Welcome to the adventure"
-casey says "Thank you!"
-wait 2 seconds
-turn off all lights
-stop background music
+#play background music chill.wav
+#dim all lights to 10
+#color light testlight1 to purple
+#pete says "Welcome to the adventure"
+#casey says "Thank you!"
+#wait 2 seconds
+#turn off all lights
+#stop background music

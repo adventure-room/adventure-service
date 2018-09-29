@@ -14,7 +14,8 @@ public enum Type {
     TEXT("\"", "[^\"]+", "\""),
     DURATION(INTEGER + " " + NAME),
     LOCATION(DOUBLE + "," + DOUBLE + "," + DOUBLE),
-    LOCATION_PATH(LOCATION + "(;" + LOCATION + ")*");
+    LOCATION_PATH(LOCATION + "(;" + LOCATION + ")*"),
+    EVERYTHING(".*");
 
     private String prefix;
     private String regex;
