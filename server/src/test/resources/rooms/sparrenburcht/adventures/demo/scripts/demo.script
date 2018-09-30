@@ -1,0 +1,22 @@
+id = demo
+name = Demo
+description = Set the scene with a suspense introduction
+requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
+
+---
+
+# It's very early in the morning, dawn is hardly visible
+dim all lights to 0
+# Mysterious music plays in the background
+play background music chill.wav at volume 50
+
+wait 3 seconds
+
+# Heavy Lightning, thunder, heavy rain
+# music changes to more scary
+# Light Lightning, thunder
+# wait a few secs
+# Heavy Lightning, thunder
+# rolling thunder and rain fade, lights brighten
+# a rooster crow is heard in the background
+narrator sais "Welcome to Pine Castle!"
