@@ -1,0 +1,8 @@
+id = experiment
+name = Experiment
+description = Experiment with new features
+requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
+
+---
+
+play rain.wav at volume 100 with 5 seconds fade in for 8 seconds

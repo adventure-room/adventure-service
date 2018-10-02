@@ -158,6 +158,7 @@ public class AdventureService {
         String actionExecutorClassName = actionClassName.replace(".model.", ".executor.") + "Executor";
         Class<? extends ActionExecutor<A>> actionExecutorClass = ReflectionUtil.classForNameNoCheckedException(actionExecutorClassName);
         ActionExecutor<A> actionExecutor = ReflectionUtil.callConstructorNoCheckedException(actionExecutorClass);
+        System.out.println("About to execute action: " + action);
         actionExecutor.execute(action, executionContext);
     }
 
