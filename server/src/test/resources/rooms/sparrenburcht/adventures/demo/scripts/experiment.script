@@ -5,4 +5,12 @@ requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
 
 ---
 
-play rain.wav at volume 100 with 5 seconds fade in for 8 seconds
+play spiral.wav save as spiral &
+
+wait 2 seconds
+
+stop playing spiral with 5 seconds fade out
+
+wait 7 seconds
+
+#play rain.wav at volume 100 with 5 seconds fade in for 8 seconds
