@@ -5,12 +5,12 @@ requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
 
 ---
 
-play spiral.wav save as spiral &
+play dog.bark.wav moving on path (0,0,0);(40,0,0) with speed 5 with listener at location (20,60,0) repeat 4 times
 
-wait 2 seconds
+#wait 2 seconds
 
-stop playing spiral with 5 seconds fade out
+#stop playing spiral with 5 seconds fade out
 
-wait 7 seconds
+#wait 7 seconds
 
 #play rain.wav at volume 100 with 5 seconds fade in for 8 seconds
