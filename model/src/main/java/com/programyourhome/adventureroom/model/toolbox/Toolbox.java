@@ -1,5 +1,7 @@
 package com.programyourhome.adventureroom.model.toolbox;
 
+import com.programyourhome.adventureroom.model.service.AdventureService;
+
 public interface Toolbox {
 
     public ContentService getContentService();
@@ -9,5 +11,7 @@ public interface Toolbox {
     public DataStreamToUrl getDataStreamToUrl();
 
     public ConversionService getConversionService();
+
+    public AdventureService getAdventureService();
 
 }

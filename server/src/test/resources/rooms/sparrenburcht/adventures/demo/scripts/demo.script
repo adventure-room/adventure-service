@@ -2,6 +2,7 @@ id = demo
 name = Demo
 description = Set the scene with a suspense introduction
 requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
+type = SCENE
 
 ---
 

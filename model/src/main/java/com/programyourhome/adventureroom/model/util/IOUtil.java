@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.function.Supplier;
 
 /**
  * Excerpt from the IOUtils class from Apache Commons.
@@ -14,6 +15,8 @@ import java.io.Writer;
  * Also added some other IO util methods.
  */
 public class IOUtil {
+
+    public static final long DEFAULT_STEP_MILLIS = 5;
 
     private IOUtil() {
     }
@@ -141,20 +144,28 @@ public class IOUtil {
         return count;
     }
 
-    /**
-     * Skip all bytes available in the stream.
-     * Because some streams might not return the full number of bytes available when the buffer is large (like AudioInputStream,
-     * that will only return a number up to half a second of audio data), we keep skipping the available bytes in a loop,
-     * until available() returns 0.
-     *
-     * @param inputStream the input stream to skip from
-     * @throws IOException if skip() or available() throw an IOException
-     */
-    public static void skipAllAvailable(InputStream inputStream) throws IOException {
-        long amountSkipped;
-        do {
-            amountSkipped = inputStream.skip(inputStream.available());
-        } while (amountSkipped > 0);
+    public static void waitForCondition(Supplier<Boolean> condition) {
+        waitMillisWithCondition(Long.MAX_VALUE, condition);
+    }
+
+    public static void waitMillis(long millis) {
+        waitMillisWithCondition(millis, () -> false, millis);
+    }
+
+    public static void waitMillisWithCondition(long millis, Supplier<Boolean> condition) {
+        waitMillisWithCondition(millis, condition, DEFAULT_STEP_MILLIS);
+    }
+
+    public static void waitMillisWithCondition(long millis, Supplier<Boolean> condition, long stepMillis) {
+        int millisSlept = 0;
+        while (millisSlept < millis && !condition.get()) {
+            try {
+                Thread.sleep(stepMillis);
+                millisSlept += stepMillis;
+            } catch (InterruptedException e) {
+                throw new IllegalStateException("Interrupted while sleeping", e);
+            }
+        }
     }
 
 }

@@ -1,0 +1,10 @@
+id = test
+name = Test Features
+description = Just for testing the system and new features
+requiredModules = common
+type = SCENE
+
+---
+
+debug print "This is a test"
+start script test2

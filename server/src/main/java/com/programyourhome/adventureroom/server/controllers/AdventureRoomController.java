@@ -1,6 +1,7 @@
 package com.programyourhome.adventureroom.server.controllers;
 
 import java.util.Set;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -13,7 +14,7 @@ import com.programyourhome.adventureroom.model.Describable;
 import com.programyourhome.adventureroom.model.Room;
 import com.programyourhome.adventureroom.model.script.Script;
 import com.programyourhome.adventureroom.server.repository.AdventureRoomRepository;
-import com.programyourhome.adventureroom.server.service.AdventureService;
+import com.programyourhome.adventureroom.server.service.AdventureServiceImpl;
 
 import one.util.streamex.StreamEx;
 
@@ -25,7 +26,7 @@ public class AdventureRoomController {
     private AdventureRoomRepository repository;
 
     @Inject
-    private AdventureService adventureService;
+    private AdventureServiceImpl adventureService;
 
     @Inject
     private ObjectConverter objectConverter;
@@ -98,15 +99,26 @@ public class AdventureRoomController {
     }
 
     /**
-     * Just run the specified script. This is mainly meant for testing purposes, cause normally you would start
-     * an adventure and the scripts will be ran based on configured triggers.
+     * Just start the specified script. This is mainly meant for testing purposes, cause normally you would start
+     * an adventure and the scripts based on configured triggers.
      */
-    @RequestMapping("{roomId}/adventures/{adventureId}/scripts/{scriptId}/run")
-    public void runRoomAdventureScript(@PathVariable("roomId") final String roomId, @PathVariable("adventureId") final String adventureId,
+    @RequestMapping("{roomId}/adventures/{adventureId}/scripts/{scriptId}/start")
+    public UUID startRoomAdventureScript(@PathVariable("roomId") final String roomId, @PathVariable("adventureId") final String adventureId,
             @PathVariable("scriptId") final String scriptId) {
         Adventure adventure = this.repository.getAdventure(roomId, adventureId);
         Script script = adventure.getScript(scriptId);
-        this.adventureService.runScript(adventure, script);
+        return this.adventureService.startScript(adventure, script);
+    }
+
+    /**
+     * Stop the specified script. This is mainly meant for testing purposes, cause normally you would stop
+     * an adventure and the scripts based on configured triggers.
+     */
+    @RequestMapping("{roomId}/adventures/{adventureId}/scripts/{scriptId}/runs/{executionId}/stop")
+    public void stopRoomAdventureScript(@PathVariable("roomId") final String roomId, @PathVariable("adventureId") final String adventureId,
+            @PathVariable("scriptId") final String scriptId, @PathVariable("executionId") final UUID executionId) {
+        // TODO validate that the execution id matches the script and adventure
+        this.adventureService.stopScript(executionId);
     }
 
 }

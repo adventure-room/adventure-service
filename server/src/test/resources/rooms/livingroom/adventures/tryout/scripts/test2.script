@@ -1,0 +1,9 @@
+id = test2
+name = Test2 Features
+description = Just for testing the system and new features
+requiredModules = common
+type = INTERACTION
+
+---
+
+debug print "This is a test2"

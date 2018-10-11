@@ -38,9 +38,10 @@ public class DataStreamToUrlController implements DataStreamToUrl {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<InputStreamResource> getStream(@PathVariable("id") String id) {
+    public synchronized ResponseEntity<InputStreamResource> getStream(@PathVariable("id") String id) {
         // TODO: throw exception / 404 if not found.
         DataStream dataStream = this.dataStreams.get(id);
+        System.out.println("Request for data stream with id " + id + " found: " + dataStream);
         InputStreamResource inputStreamResource = new InputStreamResource(dataStream.getInputStream());
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", dataStream.getContentType());
@@ -53,9 +54,10 @@ public class DataStreamToUrlController implements DataStreamToUrl {
     }
 
     @Override
-    public URL exposeDataStream(DataStream dataStream) {
+    public synchronized URL exposeDataStream(DataStream dataStream) {
         UUID id = UUID.randomUUID();
         this.dataStreams.put(id.toString(), dataStream);
+        System.out.println("Put data stream with id: " + id + " in map with value: " + dataStream);
         try {
             return new URL("http://" + this.serverAddress + ":" + this.serverPort + "/" + PATH_PREFIX + "/" + id.toString());
         } catch (MalformedURLException e) {

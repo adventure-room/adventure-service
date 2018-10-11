@@ -2,10 +2,22 @@ id = experiment
 name = Experiment
 description = Experiment with new features
 requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
+type = INTERACTION
 
 ---
 
-play dog.bark.wav moving on path (0,0,0);(40,0,0) with speed 5 with listener at location (20,60,0) repeat 4 times
+wait 6 seconds
+
+#play dragon.wings.wav at volume 20 circling around (183,183,250) with radius 183 with speed 150 with listener at location (183,183,250) repeat forever &
+#play dragon.attack.wav circling around (183,183,250) with radius 183 with speed 150 with listener at location (183,183,250) repeat forever &
+
+
+play dragon.wings.wav at volume 20 repeat forever &
+#play dragon.attack.wav repeat forever &
+
+#john speaks "This is a test sentence that is very long and should give me enough time to cancel the bloody damn thing. No wait, that was actually not long enough, now let's type some more text to enable this to actually work finally." &
+
+#play dog.bark.wav moving on path (0,0,0);(40,0,0) with speed 5 with listener at location (20,60,0) repeat 4 times
 
 #wait 2 seconds
 
@@ -14,3 +26,42 @@ play dog.bark.wav moving on path (0,0,0);(40,0,0) with speed 5 with listener at 
 #wait 7 seconds
 
 #play rain.wav at volume 100 with 5 seconds fade in for 8 seconds
+
+
+
+#TODO: This should actually be different: sounds above should include the dragon screaming and flying away, so the actual enchanting
+# Then rest returns, welcome to pine castle and then John comes back: Princess Mary, I'm back! - Oh no, John, look what happended... 
+#play background music medieval.wav
+#wait 2 seconds
+#narrator says "Welcome to Pine Castle!"
+#wait 500 millis
+#narrator says "This castle has a great history with an unfortunate recent twist"
+#narrator says "It all started when"
+# TODO: stumbling noise
+#wait 500 millis
+#narrator says "Ah, there are John and Mary. Let them explain it to you."
+#wait 500 millis
+#john says "Hi, I'm John, knight of Pine Castle. And what a glorious castle it was, right princess Mary?"
+#mary says "Oh yes, absolutely! And mainly thanks to that strong dragon Firefly, who protected it with his live."
+#john says "Until that dreadful wizard Heart Bleed put a spell on him and turned him against us."
+#mary says "Now look what's left of Pine Castle, just the walls are still standing. There must be a way to"
+#john says "Watch out, there's Firefly!"
+
+#play dragon.wings.wav circling around (20,0,0) with radius 20 with speed 10 with listener at location (20,0,0) repeat forever &
+
+#play dragon.wings.wav repeat forever &
+#play dragon.attack.wav repeat forever &
+
+#TODO: Add light effects during attack - feature todo: repeating light effects, possibly in sync with attack wave
+# (entertainment API would be perfect for this, but prob no time for that?)
+# Maybe a possible solution is to be able to trigger other scripts and have a lighting script that can be repeated.
+
+#wait 5 seconds
+
+#john says "Firefly, don't attack us!"
+#mary says "We're your friends, remember?"
+#john says "It's no use, he's under a spell! We must try to scare him away."
+#mary says "I do remember he was afraid of rattle snakes."
+#TODO: Person must find something that can make the sound of a rattle snake - like a wooden rattle!!
+
+# TODO: add a trigger to let john and mary give more hints after a certain amount of time.
