@@ -1,19 +1,18 @@
 package com.programyourhome.adventureroom.model.trigger;
 
 import com.programyourhome.adventureroom.model.event.AdventureStartedEvent;
-import com.programyourhome.adventureroom.model.script.Script;
 
+//TODO: Full Trigger refactoring
 public class StartScriptTrigger extends AbstractTrigger {
 
-    private final Script script;
+    public String scriptId;
 
-    public StartScriptTrigger(AdventureStartedEvent event, Script script) {
+    public StartScriptTrigger(AdventureStartedEvent event) {
         super(TriggerType.START_SCRIPT, event);
-        this.script = script;
     }
 
-    public Script getScript() {
-        return this.script;
+    public String getScriptId() {
+        return this.scriptId;
     }
 
 }

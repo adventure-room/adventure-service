@@ -130,6 +130,11 @@ public class AdventureServiceImpl implements AdventureService {
         if (isolatedTestRun) {
             this.startAdventure(adventure, isolatedTestRun);
         }
+        // FIXME: temp fix for stopping an interaction when a new scene is started
+        // Mainly to get the demo working, should be fixed with 'proper triggers' later.
+        if (this.runningScripts.size() == 1 && this.runningScripts.values().iterator().next().getScript().type == ScriptType.INTERACTION) {
+            this.stopScript(this.runningScripts.keySet().iterator().next());
+        }
         RunningScript runningScript = new RunningScript(script);
         this.runningScripts.put(runningScript.getId(), runningScript);
         Thread scriptRunner = new Thread(() -> {
