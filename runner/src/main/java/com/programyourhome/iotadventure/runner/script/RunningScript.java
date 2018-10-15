@@ -65,12 +65,12 @@ public class RunningScript {
         this.executingActions.remove(executor);
     }
 
-    public void stop() {
+    public void stop(ExecutionContext context) {
         synchronized (this.executingActions) {
             this.shouldStop = true;
-            this.executingActions.forEach(ActionExecutor::stop);
+            this.executingActions.forEach(executor -> executor.stop(context));
         }
-        this.runningSubScripts.values().forEach(RunningScript::stop);
+        this.runningSubScripts.values().forEach(subScript -> subScript.stop(context));
     }
 
 }

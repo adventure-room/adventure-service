@@ -6,30 +6,14 @@ type = INTERACTION
 
 ---
 
-wait 6 seconds
-
 #play dragon.wings.wav at volume 20 circling around (183,183,250) with radius 183 with speed 150 with listener at location (183,183,250) repeat forever &
 #play dragon.attack.wav circling around (183,183,250) with radius 183 with speed 150 with listener at location (183,183,250) repeat forever &
 
-
-play dragon.wings.wav at volume 20 repeat forever &
+#play dragon.wings.wav at volume 20 repeat forever &
 #play dragon.attack.wav repeat forever &
 
-#john speaks "This is a test sentence that is very long and should give me enough time to cancel the bloody damn thing. No wait, that was actually not long enough, now let's type some more text to enable this to actually work finally." &
 
-#play dog.bark.wav moving on path (0,0,0);(40,0,0) with speed 5 with listener at location (20,60,0) repeat 4 times
-
-#wait 2 seconds
-
-#stop playing spiral with 5 seconds fade out
-
-#wait 7 seconds
-
-#play rain.wav at volume 100 with 5 seconds fade in for 8 seconds
-
-
-
-#TODO: This should actually be different: sounds above should include the dragon screaming and flying away, so the actual enchanting
+#TODO: This should actually be different: sounds above should include the dragon screaming and flying away, so the actual enchanting of the dragon
 # Then rest returns, welcome to pine castle and then John comes back: Princess Mary, I'm back! - Oh no, John, look what happended... 
 #play background music medieval.wav
 #wait 2 seconds

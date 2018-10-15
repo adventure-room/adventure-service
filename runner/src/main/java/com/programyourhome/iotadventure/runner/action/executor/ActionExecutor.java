@@ -30,6 +30,6 @@ public interface ActionExecutor<A extends Action> {
      * The thread calling the execute method should exit as quickly as possible. If it does, that indicates the stopping is complete.
      * No absolute guarantee time wise or any other way can be made on how quickly stop will actually work.
      */
-    public void stop();
+    public void stop(ExecutionContext context);
 
 }

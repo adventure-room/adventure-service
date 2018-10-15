@@ -110,7 +110,7 @@ public class AdventureServiceImpl implements AdventureService {
         }
         this.eventManager.fireEvent(new AdventureStopEvent(this.activeAdventure.adventure.getId()));
 
-        this.runningScripts.values().forEach(RunningScript::stop);
+        this.runningScripts.values().forEach(script -> script.stop(this.activeAdventure.executionContext));
         IOUtil.waitForCondition(() -> StreamEx.of(this.runningScripts.values()).noneMatch(RunningScript::hasAnythingRunning));
         this.runningScripts.clear();
         this.activeAdventure.adventure.getModules().forEach(module -> module.stop(this.activeAdventure.adventure, this.activeAdventure.executionContext));
@@ -142,6 +142,11 @@ public class AdventureServiceImpl implements AdventureService {
                 System.out.println("Start run script: " + runningScript.getId());
                 this.runScriptSynchronous(adventure, runningScript);
                 System.out.println("End run script: " + runningScript.getId());
+            } catch (Exception e) {
+                // TODO: Find out how/why setUncaughtExceptionHandler works/does not work
+                System.out.println("Exception in runScriptSynchronous - kills further running of script");
+                e.printStackTrace();
+                throw e;
             } finally {
                 // Explicitly stop the script after it's done to clean up anything still running async.
                 this.stopScript(runningScript.getId());
@@ -159,7 +164,7 @@ public class AdventureServiceImpl implements AdventureService {
     @Override
     public synchronized void stopScript(UUID scriptId) {
         Optional.ofNullable(this.runningScripts.get(scriptId)).ifPresent(runningScript -> {
-            runningScript.stop();
+            runningScript.stop(this.activeAdventure.executionContext);
             IOUtil.waitForCondition(() -> !runningScript.hasAnythingRunning());
             this.runningScripts.remove(runningScript.getId());
         });
@@ -173,7 +178,16 @@ public class AdventureServiceImpl implements AdventureService {
             if (actionData.synchronous) {
                 runningScript.executeAction(executor, action, executionContext);
             } else {
-                Thread asyncActionExecutor = new Thread(() -> runningScript.executeAction(executor, action, executionContext));
+                Thread asyncActionExecutor = new Thread(() -> {
+                    try {
+                        runningScript.executeAction(executor, action, executionContext);
+                    } catch (Exception e) {
+                        // TODO: Find out how/why setUncaughtExceptionHandler works/does not work
+                        System.out.println("Exception in asyncActionExecutor");
+                        e.printStackTrace();
+                        throw e;
+                    }
+                });
                 asyncActionExecutor.setName("Executing action [" + action.getClass().getSimpleName() + "]");
                 asyncActionExecutor.setUncaughtExceptionHandler(this.handleActionException);
                 asyncActionExecutor.start();
