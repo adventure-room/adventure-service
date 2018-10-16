@@ -1,4 +1,4 @@
-event = AdventureStartedEvent
-script = triggerer
+event = TriggerEvent
+script = triggered
 
-adventureId = testing
+triggerId = testTrigger

@@ -33,6 +33,7 @@ import com.programyourhome.adventureroom.model.event.AdventureStartedEvent;
 import com.programyourhome.adventureroom.model.event.AdventureStopEvent;
 import com.programyourhome.adventureroom.model.event.Event;
 import com.programyourhome.adventureroom.model.event.EventDescriptor;
+import com.programyourhome.adventureroom.model.event.TriggerEvent;
 import com.programyourhome.adventureroom.model.module.AdventureModule;
 import com.programyourhome.adventureroom.model.module.Converter;
 import com.programyourhome.adventureroom.model.resource.AbstractExternalResource;
@@ -196,6 +197,12 @@ public class AdventureRoomLoader {
         adventureStopEventDescriptor.name = "Adventure Stopping";
         adventureStopEventDescriptor.clazz = AdventureStopEvent.class;
         availableEvents.put(adventureStopEventDescriptor.getId(), adventureStopEventDescriptor);
+
+        EventDescriptor<TriggerEvent> triggerEventDescriptor = new EventDescriptor<>();
+        triggerEventDescriptor.id = TriggerEvent.class.getSimpleName();
+        triggerEventDescriptor.name = "Trigger";
+        triggerEventDescriptor.clazz = TriggerEvent.class;
+        availableEvents.put(triggerEventDescriptor.getId(), triggerEventDescriptor);
     }
 
     private void loadAdventureData(File adventurePath, Adventure adventure, Map<String, EventDescriptor<? extends Event>> availableEvents) throws IOException {

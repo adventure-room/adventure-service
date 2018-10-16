@@ -13,11 +13,11 @@ color all lights to white in 0 seconds &
 wait 1 seconds
 
 # Mysterious music plays in the background
-play background music tension.wav at volume 50
+play background music tension.wav at volume 40 with 3 seconds fade in
 
-wait 1 seconds
+wait 2 seconds
 
-play rain.wav at volume 100 with 3 seconds fade in for 8 seconds &
+play rain.wav at volume 80 with 3 seconds fade in save as rain &
 
 wait 3 seconds
 
@@ -36,15 +36,15 @@ dim all lights to 30 in 0 seconds &
 wait 200 millis
 dim all lights to 0 in 0 seconds &
 
-wait 1 seconds
+stop playing rain with 3 seconds fade out
 
-stop background music
+stop background music with 3 seconds fade out &
 
 dim all lights to 50 in 10 seconds &
 
-wait 1 seconds
+wait 2 seconds
 
-play birds.wav for 5 seconds &
+play birds.wav at volume 80 with 3 seconds fade in for 6 seconds &
 
 wait 3 seconds
 
@@ -52,7 +52,7 @@ play rooster.wav
 
 wait 1 seconds
 
-play background music medieval.wav
+play background music medieval.wav at volume 25 with 3 seconds fade in
 
 wait 2 seconds
 

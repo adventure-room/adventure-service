@@ -6,6 +6,9 @@ type = INTERACTION
 
 ---
 
+play background music tension.wav at volume 100 with 10 seconds fade in
+
+
 #play dragon.wings.wav at volume 20 circling around (183,183,250) with radius 183 with speed 150 with listener at location (183,183,250) repeat forever &
 #play dragon.attack.wav circling around (183,183,250) with radius 183 with speed 150 with listener at location (183,183,250) repeat forever &
 
