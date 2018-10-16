@@ -19,22 +19,24 @@ type = INTERACTION
 #wait 2 seconds
 #narrator says "Welcome to Pine Castle!"
 #wait 500 millis
-#narrator says "This castle has a great history with an unfortunate recent twist"
-#narrator says "It all started when"
+#narrator says "Did you hear those strange sounds last night? What happened over there? Maybe John and Mary know more about it"
 # TODO: stumbling noise
 #wait 500 millis
-#narrator says "Ah, there are John and Mary. Let them explain it to you."
-#wait 500 millis
-#john says "Hi, I'm John, knight of Pine Castle. And what a glorious castle it was, right princess Mary?"
-#mary says "Oh yes, absolutely! And mainly thanks to that strong dragon Firefly, who protected it with his live."
-#john says "Until that dreadful wizard Heart Bleed put a spell on him and turned him against us."
-#mary says "Now look what's left of Pine Castle, just the walls are still standing. There must be a way to"
+#john says "Princess Mary, I'm back!"
+#mary says "Oh John, good to see you. Look what happened to our beautiful castle!"
+#john says "Oh no, the roof collapsed! And where is Firefly?"
+#mary says "The betrusted dragon who protects our castle is missing."
+#john says "Do you think that dreadful wizard Heart Bleed has anything to do with that?"
+#mary says "I suspect so. We must stop him and save Firefly. Can you help us player? There must be a way to"
 #john says "Watch out, there's Firefly!"
 
+#TODO: fade in
 #play dragon.wings.wav circling around (20,0,0) with radius 20 with speed 10 with listener at location (20,0,0) repeat forever &
 
 #play dragon.wings.wav repeat forever &
 #play dragon.attack.wav repeat forever &
+
+#start script dragon.attack
 
 #TODO: Add light effects during attack - feature todo: repeating light effects, possibly in sync with attack wave
 # (entertainment API would be perfect for this, but prob no time for that?)
@@ -44,8 +46,14 @@ type = INTERACTION
 
 #john says "Firefly, don't attack us!"
 #mary says "We're your friends, remember?"
-#john says "It's no use, he's under a spell! We must try to scare him away."
+#john says "No response, he must be under a spell! We should try to scare him away."
 #mary says "I do remember he was afraid of rattle snakes."
 #TODO: Person must find something that can make the sound of a rattle snake - like a wooden rattle!!
 
 # TODO: add a trigger to let john and mary give more hints after a certain amount of time.
+
+#wait 5 seconds
+#mary says "How can we make a rattle snake sound?"
+#john says "Maybe there is something lying around here to make such a sound"
+
+
