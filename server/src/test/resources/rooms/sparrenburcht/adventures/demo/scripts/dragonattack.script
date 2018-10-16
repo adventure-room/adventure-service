@@ -1,0 +1,17 @@
+id = dragonattack
+name = Dragon Attack
+description = Light effects of the dragon attack
+requiredModules = common, philipshue
+type = EFFECT
+
+---
+
+dim all lights to 20 in 0 seconds &
+color all lights to green in 0 seconds &
+
+dim all lights to 50 in 2 seconds &
+
+dim all lights to 20 in 2 seconds &
+
+
+start script dragonattack

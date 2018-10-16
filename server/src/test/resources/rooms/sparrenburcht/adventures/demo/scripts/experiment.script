@@ -36,7 +36,7 @@ type = INTERACTION
 #play dragon.wings.wav repeat forever &
 #play dragon.attack.wav repeat forever &
 
-#start script dragon.attack
+#start script dragonattack
 
 #TODO: Add light effects during attack - feature todo: repeating light effects, possibly in sync with attack wave
 # (entertainment API would be perfect for this, but prob no time for that?)
