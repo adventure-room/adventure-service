@@ -18,6 +18,7 @@ public class EventsController {
 
     @RequestMapping("trigger/{triggerId}")
     public void triggerEvent(@PathVariable("triggerId") final String triggerId) {
+        System.out.println("Event trigger with id: " + triggerId);
         this.eventManager.fireEvent(new TriggerEvent(triggerId));
     }
 

@@ -1,0 +1,72 @@
+id = bewitch
+name = Bewitch
+description = A suspense introduction where the dragon is bewitched during a scary night
+requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
+type = SCENE
+
+---
+
+# It's night and almost dark in the castle
+dim all lights to 0 in 0 seconds &
+color all lights to white in 0 seconds &
+
+wait 1 seconds
+
+# Mysterious music plays in the background
+play background music tension.wav at volume 50
+
+wait 1 seconds
+
+play rain.wav at volume 100 with 3 seconds fade in for 8 seconds &
+
+wait 3 seconds
+
+dim all lights to 100 in 0 seconds &
+play lightning.wav &
+wait 500 millis
+dim all lights to 0 in 0 seconds &
+
+wait 2 seconds
+
+play thunder.wav for 3 seconds &
+
+wait 1 seconds
+
+dim all lights to 30 in 0 seconds &
+wait 200 millis
+dim all lights to 0 in 0 seconds &
+
+wait 1 seconds
+
+dim all lights to 100 in 0 seconds &
+play lightning.wav &
+wait 500 millis
+dim all lights to 0 in 0 seconds &
+
+wizard says "Finally, the famous dragon Firefly"
+play dragon.growl.wav
+wizard says "Growl all you want, I'll make you mine"
+
+wait 500 millis
+color all lights to red and dim to 100 in 0 seconds &
+play lightning.wav &
+wait 500 millis
+color all lights to white and dim to 0 in 0 seconds &
+
+play dragon.scream.wav &
+wait 500 millis
+color all lights to green and dim to 50 in 3 seconds &
+wait 3 seconds
+play dragon.wings.wav save as dragon.wings &
+color all lights to green and dim to 100 in 0 seconds &
+play collapse.wav
+color all lights to white and dim to 0 in 5 seconds &
+wizard says "Good, good, come to me. Ha ha ha ha" &
+stop playing dragon.wings with 5 seconds fade out &
+stop background music with 5 seconds fade out &
+
+wait 5 seconds
+
+start script rattle
+
+

@@ -1,0 +1,10 @@
+id = triggerer
+name = Test Features
+description = Just for testing the system and new features
+requiredModules = common
+type = INTERACTION
+
+---
+
+debug print "Interaction script that keeps on running"
+

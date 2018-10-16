@@ -1,0 +1,10 @@
+id = triggered
+name = Test Features
+description = Just for testing the system and new features
+requiredModules = common
+type = SCENE
+
+---
+
+debug print "Triggered script that stops directly"
+
