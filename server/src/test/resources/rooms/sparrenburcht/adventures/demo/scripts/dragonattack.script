@@ -6,12 +6,13 @@ type = EFFECT
 
 ---
 
-dim all lights to 20 in 0 seconds &
-color all lights to green in 0 seconds &
+dim all lights to 10 in 0 seconds
+color all lights to green in 0 seconds
+wait 100 millis
 
-dim all lights to 50 in 2 seconds &
-
-dim all lights to 20 in 2 seconds &
-
+dim all lights to 100 in 1 seconds
+color all lights to red in 1 seconds
+dim all lights to 10 in 1 seconds
+color all lights to green in 1 seconds
 
 start script dragonattack

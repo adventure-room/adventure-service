@@ -6,32 +6,32 @@ type = INTERACTION
 
 ---
 
-dim all lights to 0 in 0 seconds &
-color all lights to orange in 0 seconds &
-
-color all lights to yellow and dim to 100 in 30 seconds &
-
-wait 1 seconds
-
-play birds.wav at volume 50 with 3 seconds fade in for 8 seconds &
-
-wait 3 seconds
-
-play rooster.wav
-
-wait 1 seconds
-
-play background music medieval.wav at volume 2 with 3 seconds fade in
-
-wait 4 seconds
-
-narrator says "Welcome to Pine Castle!"
-
-wait 2 seconds
+#dim all lights to 0 in 0 seconds &
+#color all lights to orange in 0 seconds &
+#
+#color all lights to yellow and dim to 100 in 30 seconds &
+#
+#wait 1 seconds
+#
+#play birds.wav at volume 50 with 3 seconds fade in for 8 seconds &
+#
+#wait 3 seconds
+#
+#play rooster.wav
+#
+#wait 1 seconds
+#
+#play background music medieval.wav at volume 2 with 3 seconds fade in
+#
+#wait 4 seconds
+#
+#narrator says "Welcome to Pine Castle!"
+#
+#wait 2 seconds
 #narrator says "Did you hear those strange sounds last night? What could have happened? Maybe John and Mary know more about it."
 
 #TODO:play stumbling/walking.wav
-#wait 500 millis
+wait 500 millis
 #john says "Princess Mary, I'm back!" at speakers 1,2
 #mary says "Oh John, it's so good to see you. Look what happened to our beautiful castle!" at speakers 3,4
 #john says "Oh no, the roof collapsed! And where is Firefly?" at speakers 1,2
@@ -40,15 +40,12 @@ wait 2 seconds
 #mary says "I suspect so. We must stop him and save Firefly. Can you help us, player? There must be a way to" at speakers 3,4
 #john says "Watch out, there's Firefly!" at speakers 1,2
 
-stop background music
+#stop background music
 #TODO: scary background music?
-#play dragon.wings.wav at volume 20 circling around (183,183,250) with radius 183 with speed 150 with listener at location (183,183,250) repeat forever &
-#play dragon.attack.wav circling around (183,183,250) with radius 183 with speed 150 with listener at location (183,183,250) repeat forever &
+play dragon.wings.wav at volume 20 circling around (183,183,250) with radius 183 with speed 80 with listener at location (183,183,250) repeat forever &
+play dragon.attack.wav circling around (183,183,250) with radius 183 with speed 80 with listener at location (183,183,250) repeat forever &
 
-play dragon.wings.wav &
-#play dragon.attack.wav &
-
-#start script dragonattack
+start script dragonattack
 
 wait 5 seconds
 

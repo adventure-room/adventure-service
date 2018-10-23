@@ -1,4 +1,4 @@
 event = AdventureStartedEvent
-script = demo
+script = bewitch
 
 adventureId = demo

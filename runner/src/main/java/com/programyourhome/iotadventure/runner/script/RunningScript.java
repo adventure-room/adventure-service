@@ -59,10 +59,12 @@ public class RunningScript {
                 this.executingActions.add(executor);
             }
         }
-        System.out.println("Before execute action");
+        System.out.println("Before execute action: " + action.getClass().getSimpleName());
         executor.execute((A) action, context);
-        System.out.println("After execute action");
-        this.executingActions.remove(executor);
+        System.out.println("After execute action: " + action.getClass().getSimpleName());
+        synchronized (this.executingActions) {
+            this.executingActions.remove(executor);
+        }
     }
 
     public void stop(ExecutionContext context) {
