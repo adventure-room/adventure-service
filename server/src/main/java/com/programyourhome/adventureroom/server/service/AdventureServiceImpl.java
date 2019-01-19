@@ -2,6 +2,7 @@ package com.programyourhome.adventureroom.server.service;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -130,12 +131,15 @@ public class AdventureServiceImpl implements AdventureService {
         if (isolatedTestRun) {
             this.startAdventure(adventure, isolatedTestRun);
         }
-        // Not needed acxtually: the trigger will stop the script.
-        // // FIXME: temp fix for stopping an interaction when a new scene is started
-        // // Mainly to get the demo working, should be fixed with 'proper triggers' later.
-        // if (this.runningScripts.size() == 1 && this.runningScripts.values().iterator().next().getScript().type == ScriptType.INTERACTION) {
-        // this.stopScript(this.runningScripts.keySet().iterator().next());
-        // }
+        // FIXME: temp fix for stopping an interaction when a new scene is started (now even on specific name, ugly!!)
+        // Mainly to get the demo working, should be fixed with 'proper triggers' later.
+        System.out.println("BEFORE CHECKING STOP SCRIPT");
+        // if (script.type == ScriptType.SCENE && this.runningScripts.size() == 1
+        // && StreamEx.of(this.runningScripts.values()).anyMatch(runningScript -> runningScript.getScript().type == ScriptType.INTERACTION)) {
+        if (script.type == ScriptType.SCENE && script.id.equals("dragonscared")) {
+            System.out.println("YES WE'RE GOING TO STOP CURRENT SCRIPTS");
+            new HashSet<>(this.runningScripts.values()).forEach(runningScript -> this.stopScript(runningScript.getId()));
+        }
         RunningScript runningScript = new RunningScript(script);
         this.runningScripts.put(runningScript.getId(), runningScript);
         Thread scriptRunner = new Thread(() -> {

@@ -1,0 +1,24 @@
+id = dragonscared
+name = Dragon Scared Away
+description = Triggered by the rattle sound, the dragon is scared away and the first puzzle has been solved
+requiredModules = common, philipshue, amazonpolly, immerse, sparrenburcht
+type = SCENE
+
+---
+
+dim all lights to 30 in 0 seconds &
+wait 100 millis
+color all lights to orange in 0 seconds &
+wait 100 millis
+dim all lights to 100 in 15 seconds &
+
+play dragon.scream.wav &
+wait 3 seconds
+play dragon.flapping.wav at volume 5 for 10 seconds &
+wait 3 seconds
+
+#mary says "Well done, Firefly is scared away!" at speakers 3,4
+play well.done.wav at speakers 4,5
+
+#john says "For now. Let's try to think of a way to get rid of that nasty spell on him" at speakers 1,2
+play for.now.wav at speakers 12,1

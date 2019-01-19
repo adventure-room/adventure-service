@@ -7,10 +7,10 @@ type = SCENE
 ---
 
 # It's night and almost dark in the castle
-dim all lights to 0 in 0 seconds &
+dim all lights to 30 in 0 seconds &
 color all lights to orange in 0 seconds &
 
-wait 1 seconds
+wait 10 seconds
 
 # Mysterious music plays in the background
 play background music tension.wav at volume 5
@@ -23,9 +23,9 @@ wait 3 seconds
 
 color all lights to white in 0 seconds &
 dim all lights to 100 in 0 seconds &
-play lightning.wav &
+play lightning.wav at volume 80 &
 wait 500 millis
-dim all lights to 0 in 0 seconds &
+dim all lights to 30 in 0 seconds &
 color all lights to orange in 0 seconds &
 
 wait 2 seconds
@@ -37,16 +37,16 @@ wait 1 seconds
 color all lights to white in 0 seconds &
 dim all lights to 40 in 0 seconds &
 wait 200 millis
-dim all lights to 0 in 0 seconds &
+dim all lights to 30 in 0 seconds &
 color all lights to orange in 0 seconds &
 
 wait 3 seconds
 
 color all lights to white in 0 seconds &
 dim all lights to 100 in 0 seconds &
-play lightning.wav &
+play lightning.wav at volume 80 &
 wait 500 millis
-dim all lights to 0 in 0 seconds &
+dim all lights to 30 in 0 seconds &
 color all lights to orange in 0 seconds &
 play thunder.wav at volume 40 for 6 seconds &
 
@@ -61,12 +61,12 @@ color all lights to red in 0 seconds &
 play spell.wav
 wait 500 millis
 dim all lights to 100 in 0 seconds &
-play lightning.wav &
+play lightning.wav at volume 80 &
 wait 500 millis
-dim all lights to 0 in 0 seconds &
+dim all lights to 30 in 0 seconds &
 
 wait 500 millis
-color all lights to green and dim to 0 in 6 seconds &
+color all lights to green and dim to 30 in 6 seconds &
 play dragon.scream.wav &
 wait 3 seconds
 play dragon.flapping.wav repeat forever save as dragon.flapping &
@@ -74,12 +74,12 @@ wait 3 seconds
 color all lights to green and dim to 100 in 0 seconds &
 play collapse.wav at volume 80 save as collapse &
 wait 1 seconds
-color all lights to green and dim to 0 in 0 seconds &
+dim all lights to 30 in 0 seconds &
 wait 1 seconds
 stop playing collapse with 2 seconds fade out &
 wait 1 seconds
 play come.to.me.wav &
-color all lights to orange and dim to 0 in 8 seconds &
+color all lights to orange and dim to 30 in 8 seconds &
 stop playing dragon.flapping with 8 seconds fade out &
 stop playing rain with 8 seconds fade out &
 stop background music with 8 seconds fade out &

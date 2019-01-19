@@ -6,41 +6,60 @@ type = INTERACTION
 
 ---
 
-#dim all lights to 0 in 0 seconds &
-#color all lights to orange in 0 seconds &
-#
-#color all lights to yellow and dim to 100 in 30 seconds &
-#
-#wait 1 seconds
-#
-#play birds.wav at volume 50 with 3 seconds fade in for 8 seconds &
-#
-#wait 3 seconds
-#
-#play rooster.wav
-#
-#wait 1 seconds
-#
-#play background music medieval.wav at volume 2 with 3 seconds fade in
-#
-#wait 4 seconds
-#
+dim all lights to 30 in 0 seconds &
+wait 100 millis
+color all lights to orange in 0 seconds &
+wait 100 millis
+
+color all lights to yellow and dim to 100 in 30 seconds &
+
+wait 1 seconds
+
+play birds.wav at volume 50 with 3 seconds fade in for 8 seconds &
+
+wait 3 seconds
+
+play rooster.wav
+
+wait 1 seconds
+
+play background music medieval.wav at volume 2 with 3 seconds fade in
+
+wait 4 seconds
+
 #narrator says "Welcome to Pine Castle!"
-#
-#wait 2 seconds
+play welcome.pine.castle.wav at volume 60 at all speakers
+
+wait 2 seconds
 #narrator says "Did you hear those strange sounds last night? What could have happened? Maybe John and Mary know more about it."
+play what.happened.wav at volume 60 at all speakers
 
 #TODO:play stumbling/walking.wav
 wait 500 millis
-#john says "Princess Mary, I'm back!" at speakers 1,2
-#mary says "Oh John, it's so good to see you. Look what happened to our beautiful castle!" at speakers 3,4
-#john says "Oh no, the roof collapsed! And where is Firefly?" at speakers 1,2
-#mary says "The betrusted dragon who protects our castle, is missing." at speakers 3,4
-#john says "Do you think that dreadful wizard Heart Bleed has anything to do with that?" at speakers 1,2
-#mary says "I suspect so. We must stop him and save Firefly. Can you help us, player? There must be a way to" at speakers 3,4
-#john says "Watch out, there's Firefly!" at speakers 1,2
 
-#stop background music
+#john says "Princess Mary, I'm back!" at speakers 1,2
+play mary.im.back.wav at speakers 12,1
+
+#mary says "Oh John, it's so good to see you. Look what happened to our beautiful castle!" at speakers 3,4
+play john.good.see.you.wav at speakers 4,5
+
+#john says "Oh no, the roof collapsed! And where is Firefly?" at speakers 1,2
+play roof.where.firefly.wav at speakers 12,1
+
+#mary says "The betrusted dragon who protects our castle, is missing." at speakers 3,4
+play dragon.missing.wav at speakers 4,5
+
+#john says "Do you think that dreadful wizard Heart Bleed has anything to do with that?" at speakers 1,2
+play wizard.anything.todo.wav at speakers 12,1
+
+#mary says "I suspect so. We must stop him and save Firefly. Can you help us, player? There must be a way to" at speakers 3,4
+play suspect.save.firefly.wav at speakers 4,5
+play help.player.wav at speakers 4,5
+
+#john says "Watch out, there's Firefly!" at speakers 1,2
+play watch.out.firefly.wav at speakers 12,1
+
+stop background music
 #TODO: scary background music?
 play dragon.wings.wav at volume 20 circling around (183,183,250) with radius 183 with speed 80 with listener at location (183,183,250) repeat forever &
 play dragon.attack.wav circling around (183,183,250) with radius 183 with speed 80 with listener at location (183,183,250) repeat forever &
@@ -49,15 +68,28 @@ start script dragonattack
 
 wait 5 seconds
 
-john says "Firefly, don't attack us!" at speakers 1,2
-mary says "We're your friends, remember?" at speakers 3,4
-john says "No response, he must be under a spell! We should try to scare him away." at speakers 1,2
-mary says "I do remember he's afraid of rattle snakes." at speakers 3,4
+#john says "Firefly, don't attack us!" at speakers 1,2
+play firefly.dont.attack.wav at speakers 12,1
+
+#mary says "We're your friends, remember?" at speakers 3,4
+play friends.remember.wav at speakers 4,5
+
+#john says "No response, he must be under a spell! We should try to scare him away." at speakers 1,2
+play spell.scare.wav at speakers 12,1
+
+#mary says "I do remember he's afraid of rattle snakes." at speakers 3,4
+play afraid.rattle.wav at speakers 4,5
 
 # Person must find something that can make the sound of a rattle snake - like a wooden rattle!!
 
 wait 10 seconds
 
-mary says "How can we make a rattle snake sound?" at speakers 3,4
-john says "Maybe there is something lying around here to make such a sound." at speakers 1,2
+#mary says "How can we make a rattle snake sound?" at speakers 3,4
+play mimic.rattle.wav at speakers 4,5
+
+#john says "Maybe there is something lying around here to make such a sound." at speakers 1,2
+play make.rattle.sound.wav at speakers 12,1
+
+wait 10 seconds
+start script dragonscared
 

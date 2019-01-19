@@ -1,4 +1,4 @@
 event = TriggerEvent
-script = rattle
+script = dragonscared
 
 triggerId = rattle

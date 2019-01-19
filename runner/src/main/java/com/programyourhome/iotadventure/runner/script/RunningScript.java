@@ -68,10 +68,13 @@ public class RunningScript {
     }
 
     public void stop(ExecutionContext context) {
+        // Make a copy to loop over to prevent concurrent modification exceptions.
+        Set<ActionExecutor<?>> executingActionsCopy;
         synchronized (this.executingActions) {
-            this.shouldStop = true;
-            this.executingActions.forEach(executor -> executor.stop(context));
+            executingActionsCopy = new HashSet<>(this.executingActions);
         }
+        this.shouldStop = true;
+        executingActionsCopy.forEach(executor -> executor.stop(context));
         this.runningSubScripts.values().forEach(subScript -> subScript.stop(context));
     }
 
